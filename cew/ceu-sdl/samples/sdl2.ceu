@@ -1,0 +1,97 @@
+#include "sdl.ceu"
+
+input void SDL_REDRAW;
+input void SDL_QUIT;
+
+native do
+    SDL_Renderer* REN = NULL;
+    int REN_W, REN_H;
+end
+
+var _SDL_Window[] win;
+    finalize
+        win = _SDL_CreateWindow("SDL 2", _SDL_WINDOWPOS_CENTERED,
+                                         _SDL_WINDOWPOS_CENTERED,
+                                         800, 480,
+                                         _SDL_WINDOW_SHOWN);
+    with
+        _SDL_DestroyWindow(win);
+    end
+
+_SDL_GetWindowSize(win, &_REN_W, &_REN_H);
+
+finalize
+    _REN = _SDL_CreateRenderer(win, -1, 0);
+with
+    _SDL_DestroyRenderer(_REN);
+end
+
+var _SDL_Rect bg;
+    bg.w = _REN_W;
+    bg.h = _REN_H;
+    bg.x = 0;
+    bg.y = 0;
+
+var _SDL_Color bg_clr;
+    bg_clr.r = 0x00;
+    bg_clr.g = 0x00;
+    bg_clr.b = 0x00;
+
+class Rect with
+    var _SDL_Rect rect;
+    var int       v;
+do
+    var _SDL_Color clr;
+        clr.r = 0xFF;
+        clr.g = 0xFF;
+        clr.b = 0xFF;
+
+    par/or do
+        every (1000/this.v) ms do
+            rect.x = rect.x + 1;
+            if rect.x > 500 then
+                break;
+            end
+        end
+    with
+        every SDL_REDRAW do
+            _SDL_SetRenderDrawColor(_REN, clr.r,clr.g,clr.b,0xFF);
+            _SDL_RenderFillRect(_REN, &rect);
+        end
+    end
+end
+
+par/or do
+    await SDL_QUIT;
+with
+    every SDL_REDRAW do
+        _SDL_SetRenderDrawColor(_REN, bg_clr.r,bg_clr.g,bg_clr.b,0xFF);
+        _SDL_RenderFillRect(_REN, &bg);
+    end
+with
+    loop do
+        var Rect r1 with
+            this.rect.x = 100;
+            this.rect.y = 100;
+            this.rect.w = 20;
+            this.rect.h = 20;
+            this.v      = 100;
+        end;
+
+        var Rect r2 with
+            this.rect.x = 100;
+            this.rect.y = 200;
+            this.rect.w = 40;
+            this.rect.h = 40;
+            this.v      = 25;
+        end;
+
+        await 10s;
+    end
+with
+    every SDL_REDRAW do
+        _SDL_RenderPresent(_REN);
+    end
+end
+
+escape 0;

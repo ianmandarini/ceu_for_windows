@@ -1,0 +1,78 @@
+#ifndef _UI_CEU
+#define _UI_CEU
+
+native @const _UI_ALIGN_LEFT, _UI_ALIGN_CENTER, _UI_ALIGN_RIGHT,
+              _UI_ALIGN_TOP,  _UI_ALIGN_MIDDLE, _UI_ALIGN_BOTTOM;
+
+native @pure _UI_align(), _UI_align_bg();
+
+native do
+    enum {
+        UI_ALIGN_LEFT = 0,
+        UI_ALIGN_CENTER,
+        UI_ALIGN_RIGHT
+    };
+    enum {
+        UI_ALIGN_TOP = 0,
+        UI_ALIGN_MIDDLE,
+        UI_ALIGN_BOTTOM,
+    };
+
+    int UI_align (int p, int dim, int align)
+    {
+        switch (align)
+        {
+            case UI_ALIGN_LEFT:
+            //case UI_ALIGN_TOP:
+                return p;
+
+            case UI_ALIGN_CENTER:
+            //case UI_ALIGN_MIDDLE:
+                return p - dim/2;
+
+            case UI_ALIGN_RIGHT:
+            //case UI_ALIGN_BOTTOM:
+                return p - dim;
+        }
+    }
+
+    int UI_align_bg (int p_out, int dim_out, int dim_in, int align)
+    {
+        switch (align)
+        {
+            case UI_ALIGN_LEFT:
+            //case UI_ALIGN_TOP:
+                return p_out;
+
+            case UI_ALIGN_CENTER:
+            //case UI_ALIGN_MIDDLE:
+                return p_out + (dim_out - dim_in)/2;
+
+            case UI_ALIGN_RIGHT:
+            //case UI_ALIGN_BOTTOM:
+                return p_out + (dim_out - dim_in);
+        }
+    }
+end
+
+interface UI with
+    //event void           ok_redraw_pre;
+    //event void           ok_redraw_pos;
+    event void           ok_clicked;
+    //event _SDL_Point*    go_move;
+
+    var   _SDL_Renderer[] ren;
+    var   _SDL_Rect       rect;
+    var   bool            redim?;
+    var   _SDL_Color[]    bg_clr;
+
+    var   int             align_x;
+    var   int             align_y;
+    var   int             align_bg_x;
+    var   int             align_bg_y;
+
+    function @rec (SDL_Rect* rect)=>void go;
+    function @rec (_SDL_Rect* bg, bool redim??)=>void go_bg;
+end
+
+#endif

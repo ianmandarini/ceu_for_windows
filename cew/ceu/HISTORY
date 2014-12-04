@@ -1,0 +1,82 @@
+* v0.8 (jun'14)
+    (+) manual
+    (+) `pool´ for organisms
+    (+) `watching´ for organisms and events
+    (+) `outer´ accessor inside constructors
+    (+) `loop/N´ for bounded tight loops
+    (+) `_´ as an anonymous identifier
+    (+) `&´ references
+    (+) `[]´ plain pointers
+    (+) `plain´ type annotation
+    (+) experimental: embedded Lua source
+    (+) experimental: `do T with ... end;´
+    (^) `@´ prefix for all annotations
+    (^) `in´ token for loops (instead of `,´ and `=´)
+    (-) `free´ for organisms
+
+* v0.7 (apr'14)
+    (+) new primitive types: bool, char, uint, word, float, f32, f64
+    (+) `true´, `false´ constants
+    (+) functions and class methods
+    (^) `return´ statement has been replaced by `escape´
+    (^) Fallback to `avr-gcc´ 4.1.2 under CiB (micaz bugfix)
+    (+) experimental `isr´ interrupt service routines (also, `atomic´ blocks)
+    (+) experimental microkernel support ("OS" mode)
+    (+) experimental `input/output´ requests (in "OS" mode)
+
+* v0.6 (aug'13)
+    (+) `async thread do´ statement
+        (+) `sync do´ statement inside `async thread´
+    (+) C preprocessor
+    (+) iterators for spawned organisms in a block
+    (+) native code in between `{´ and `}´
+    (+) tuple types for events
+    (+) interface accessors from C
+    (^) per `spawn´/`new´ pools
+    (-) `m4´ support
+    (-) `@´ token
+
+* v0.5 (may'13)
+    (+) classes can specify a memory pool for its organisms
+    (+) interfaces can have C functions
+    (^) `C´ keyword renamed to `native´
+    (^) scheduler rewritten
+
+* v0.4 (may'13)
+    (+) classes and interfaces
+    (+) `nothing´ statement
+    (+) `continue´ statement
+    (+) `await <evt> until´ statement
+    (+) `every <evt> do´ statement
+    (^) `finalize with´
+    (^) deterministic scheduler
+    (^) simpler (polynomial) static analysis
+
+* v0.3 (dec'12)
+    (+) `else/if´ clause for conditionals
+    (+) `pause/if´ statement
+    (+) `C´ declarations
+        (*) types, variables, and functions in C
+        (+) `nohold´ keyword to annotate functions that do not
+            hold references to pointers passed as parameters
+    (+) escape analysis for pointer assignments
+        (*) enforces placement of `finally´ blocks
+        (+) `:=´ keyword to force assignments
+    (+) `var´ keyword to precede variable declarations
+    (+) types as keywords (void,int,u8,u16,u32,u64,s8,s16,s32,s64)
+    (^) operator renamings:
+        (^) `!´,`&&´,`||´ TO `not´,`and´,`or´
+        (^) `->´ TO `:´
+    (^) external events must be all capitalized
+
+* v0.2 (sep'12)
+    (+) `finally´ blocks
+    (+) external types
+    (^) static analysis rewritten
+    (*) many bug fixes
+
+* v0.1.1 (jul'12)
+    (*) many bug fixes
+
+* v0.1 (jul'12)
+    (*) first release

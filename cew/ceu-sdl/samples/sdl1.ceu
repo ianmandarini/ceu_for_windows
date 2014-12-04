@@ -1,0 +1,70 @@
+#include "sdl.ceu"
+
+input void SDL_REDRAW;
+input void SDL_QUIT;
+
+native do
+    SDL_Renderer* REN = NULL;
+    int REN_W, REN_H;
+end
+
+var _SDL_Window[] win;
+    finalize
+        win = _SDL_CreateWindow("SDL 1", _SDL_WINDOWPOS_CENTERED,
+                                         _SDL_WINDOWPOS_CENTERED,
+                                         800, 480,
+                                         _SDL_WINDOW_SHOWN);
+    with
+        _SDL_DestroyWindow(win);
+    end
+
+_SDL_GetWindowSize(win, &_REN_W, &_REN_H);
+
+finalize
+    _REN = _SDL_CreateRenderer(win, -1, 0);
+with
+    _SDL_DestroyRenderer(_REN);
+end
+
+var _SDL_Rect bg;
+    bg.w = _REN_W;
+    bg.h = _REN_H;
+    bg.x = 0;
+    bg.y = 0;
+
+var _SDL_Color bg_clr;
+    bg_clr.r = 0xFF;
+    bg_clr.g = 0xFF;
+    bg_clr.b = 0x00;
+
+var _SDL_Rect fg;
+    fg.w = 100;
+    fg.h = 100;
+    fg.x = 100;
+    fg.y = 100;
+
+var _SDL_Color fg_clr;
+    fg_clr.r = 0xFF;
+    fg_clr.g = 0x00;
+    fg_clr.b = 0x00;
+
+par/or do
+    await SDL_QUIT;
+with
+    every 1s do
+        fg.x = fg.x + 10;
+        fg.y = fg.y + 10;
+    end
+with
+    every SDL_REDRAW do
+        _SDL_SetRenderDrawColor(_REN, bg_clr.r,bg_clr.g,bg_clr.b,0xFF);
+        _SDL_RenderFillRect(_REN, &bg);
+
+        _SDL_SetRenderDrawColor(_REN, fg_clr.r,fg_clr.g,fg_clr.b,0xFF);
+        _SDL_RenderFillRect(_REN, &fg);
+
+        _SDL_RenderPresent(_REN);
+    end
+end
+
+escape 0;
