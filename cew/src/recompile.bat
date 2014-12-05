@@ -1,0 +1,1 @@
+..\mingw\bin\gcc -o ..\ceusdlc ceusdlc.c

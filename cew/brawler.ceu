@@ -6,7 +6,7 @@
     #define WINDOW_TITLE "Hero Brawler"
     #define RES_X 640
     #define RES_Y 480
-    #define GRAVITY 2.0
+    #define GRAVITY 5.0
 //============================================================
     input void SDL_QUIT;
     input void SDL_REDRAW;
@@ -144,9 +144,9 @@ do
             key = await SDL_KEYDOWN;
             if key:keysym.sym == _SDLK_UP then
                 if jumps_ready > 0 then
-                    this.spd_y = -1.0;
+                    this.spd_y = -1.5;
                     jumps_ready = jumps_ready - 1;
-                    await 500ms;
+                    await 200ms;
                 end
             end
         end

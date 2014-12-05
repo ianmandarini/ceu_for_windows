@@ -39,7 +39,7 @@ int main(int argn, char* argc[])
 	strcpy(cmd,"");
 	strcat(cmd,"start \"\" /D\"");
 	strcat(cmd,current_dir);
-	strcat(cmd,"\\ceu-sdl\" /B /W lua5.1\\bin\\lua.exe ceu");
+	strcat(cmd,"\\ceu-sdl\" /B /W lua5.1\\bin\\lua.exe ceu --cpp-exe ..\\mingw\\bin\\cpp");
 	for(i=1;i<argn;i++)
 	{
 		strcat(cmd," \"");

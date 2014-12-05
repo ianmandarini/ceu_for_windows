@@ -2276,7 +2276,7 @@ OPTS = {
     c_calls   = false,
 
     cpp       = true,
-    cpp_exe   = '..\\mingw\\bin\\cpp',
+    cpp_exe   = 'cpp',
     cpp_args  = false,
 
     safety    = 0,
