@@ -1,9 +1,5 @@
 #ifndef ALL
 
-native do
-    #include "math.h"
-end
-
 #include "sdl.ceu"
 
 input void SDL_QUIT;

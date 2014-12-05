@@ -128,3 +128,8 @@ Coded and compiled C program source\ceuc.c
 
 Use it as:
 	ceusdlc RELATIVE_PATH
+
+Altered line in file ceu\ceu and ceu-sdl\ceu from
+    cpp_exe   = 'cpp',
+    to
+    cpp_exe   = '..\\mingw\\bin\\cpp',
