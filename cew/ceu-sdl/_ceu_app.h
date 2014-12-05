@@ -3,12 +3,7 @@
 
 #include "ceu_types.h"
 
-#define CEU_INTS
-#define CEU_EXTS
-#define CEU_ORGS
-#define CEU_RET
-#define CEU_GOTO
-#define CEU_CLEAR
+#define CEU_WCLOCKS
      /* CEU_EXTS, CEU_WCLOCKS, CEU_INTS, ... */
 
 /* TODO: lbl => unsigned */
@@ -22,7 +17,7 @@ typedef s8 tceu_ncls;
 #endif
 
 /* TODO: remove */
-#define CEU_NTRAILS 8
+#define CEU_NTRAILS 1
 
 #ifndef _CEU_OS_H
 #define _CEU_OS_H
@@ -582,24 +577,9 @@ extern void* CEU_SYS_VEC[CEU_SYS_MAX];
 #define CEU_IN__WCLOCK 250
 #define CEU_IN__ASYNC 249
 #define CEU_IN__THREAD 248
-#define CEU_IN_SDL_QUIT 247
-#define CEU_IN_SDL_REDRAW 246
-#define CEU_IN_SDL_DT 245
 #define CEU_OUT_n 0
       /* CEU_IN_, CEU_OUT_ */
-#define CEU_FUN_SDL_GetError
-#define CEU_FUN_SDL_DestroyTexture
-#define CEU_FUN_sin
-#define CEU_FUN_SDL_DestroyRenderer
 #define CEU_FUN_printf
-#define CEU_FUN_IMG_LoadTexture
-#define CEU_FUN_SDL_RenderFillRect
-#define CEU_FUN_SDL_SetRenderDrawColor
-#define CEU_FUN_SDL_RenderPresent
-#define CEU_FUN_SDL_CreateRenderer
-#define CEU_FUN_SDL_DestroyWindow
-#define CEU_FUN_SDL_RenderCopy
-#define CEU_FUN_SDL_CreateWindow
    /* CEU_FUN_ */
 
 

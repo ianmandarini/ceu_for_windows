@@ -26,19 +26,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#line 1 "brawler.ceu"
+#line 1 "h.ceu"
 
 #ifndef _CEU_APP_H
 #define _CEU_APP_H
 
 #include "ceu_types.h"
 
-#define CEU_INTS
-#define CEU_EXTS
-#define CEU_ORGS
-#define CEU_RET
-#define CEU_GOTO
-#define CEU_CLEAR
+#define CEU_WCLOCKS
      /* CEU_EXTS, CEU_WCLOCKS, CEU_INTS, ... */
 
 /* TODO: lbl => unsigned */
@@ -52,7 +47,7 @@ typedef s8 tceu_ncls;
 #endif
 
 /* TODO: remove */
-#define CEU_NTRAILS 8
+#define CEU_NTRAILS 1
 
 #ifndef _CEU_OS_H
 #define _CEU_OS_H
@@ -612,24 +607,9 @@ extern void* CEU_SYS_VEC[CEU_SYS_MAX];
 #define CEU_IN__WCLOCK 250
 #define CEU_IN__ASYNC 249
 #define CEU_IN__THREAD 248
-#define CEU_IN_SDL_QUIT 247
-#define CEU_IN_SDL_REDRAW 246
-#define CEU_IN_SDL_DT 245
 #define CEU_OUT_n 0
       /* CEU_IN_, CEU_OUT_ */
-#define CEU_FUN_SDL_GetError
-#define CEU_FUN_SDL_DestroyTexture
-#define CEU_FUN_sin
-#define CEU_FUN_SDL_DestroyRenderer
 #define CEU_FUN_printf
-#define CEU_FUN_IMG_LoadTexture
-#define CEU_FUN_SDL_RenderFillRect
-#define CEU_FUN_SDL_SetRenderDrawColor
-#define CEU_FUN_SDL_RenderPresent
-#define CEU_FUN_SDL_CreateRenderer
-#define CEU_FUN_SDL_DestroyWindow
-#define CEU_FUN_SDL_RenderCopy
-#define CEU_FUN_SDL_CreateWindow
    /* CEU_FUN_ */
 
 
@@ -3164,233 +3144,25 @@ int ceu_pool_inside (tceu_pool* pool, byte* val) {
 
 /* native code from the Main class */
 
-#line 96 "sdl.ceu"
-
-    int SDL_Rect_vs_Mouse (SDL_Rect* r, SDL_MouseButtonEvent* but) {
-        return (but->x >= r->x) && (but->x <= r->x+r->w)
-            && (but->y >= r->y) && (but->y <= r->y+r->h);
-    }
-    int SDL_Rect_vs_Point (SDL_Rect* r, SDL_Point* pt) {
-        return (pt->x >= r->x) && (pt->x <= r->x+r->w)
-            && (pt->y >= r->y) && (pt->y <= r->y+r->h);
-    }
-    SDL_Point* SDL_Touch2Point (SDL_Point* pt, SDL_TouchFingerEvent* e, int w, int h) {
-        pt->x = e->x * w;
-        pt->y = e->y * h;
-        return pt;
-    }
-
-    SDL_Point SDL_Rect2Point (SDL_Rect* r) {
-        SDL_Point pt = { r->x+r->w/2, r->y+r->h/2 };
-        return pt;
-    }
-    SDL_Rect SDL_Point2Rect (SDL_Point* pt, int radix) {
-        SDL_Rect r = { pt->x-radix, pt->y-radix, radix*2, radix*2 };
-        return r;
-    }
-#ifdef SDL_MATH
-    int SDL_Circle_vs_Mouse (SDL_Point* pos, int rad, SDL_MouseButtonEvent* but) {
-        SDL_Point pt = { but->x, but->y };
-        return SDL_Circle_vs_Point(pos, rad, &pt);
-    }
-
-    int SDL_Circle_vs_Point (SDL_Point* pos, int rad, SDL_Point* pt) {
-        return sqrt( pow(pos->x-pt->x,2) + pow(pos->y-pt->y,2) ) < rad;
-    }
-
-    int SDL_Circle_vs_Circle (SDL_Point* pos1, int rad1, SDL_Point* pos2, int rad2) {
-        return sqrt( pow(pos1->x-pos2->x,2) + pow(pos1->y-pos2->y,2) )
-                < rad1+rad2;
-    }
-#endif
-#line 30 "brawler.ceu"
-
-    SDL_Texture* HERO;
 
 /* class definitions */
 /* may use types defined above in "NATIVE" */
 /* each class may define new native code that appear after its struct declaration */
-
-typedef struct CEU_Bird {
-  struct tceu_org org;
-  tceu_trl trls_[ 3 ];
-  struct { /* BLOCK ln=45 */
-    #line 46 "brawler.ceu"
-SDL_Renderer* ren;
-    #line 47 "brawler.ceu"
-SDL_Rect r;
-    #line 48 "brawler.ceu"
-int speed;
-    union {
-      struct { /* BLOCK ln=50 */
-        #line 54 "brawler.ceu"
-SDL_Texture* tex;
-        union {
-          union {
-          };
-          struct {
-            struct { /* BLOCK ln=57 */
-              #line 57 "brawler.ceu"
-float sin_5;
-              #line 59 "brawler.ceu"
-int dt_7;
-              #line 58 "brawler.ceu"
-int y_6;
-              #line 60 "brawler.ceu"
-float x_8;
-              union {
-                union {
-                };
-                union {
-                };
-                union {
-                };
-                union {
-                };
-                  union {
-                    union {
-                    };
-                    struct { /* BLOCK ln=62 */
-                      union {
-                        union {
-                        };
-                          struct { /* BLOCK ln=69 */
-                            union {
-                            };
-                          };
-                          struct { /* BLOCK ln=71 */
-                            union {
-                            };
-                          };
-                      };
-                    };
-                  };
-              };
-            };
-            struct { /* BLOCK ln=75 */
-              union {
-                  union {
-                    struct { /* BLOCK ln=76 */
-                      union {
-                      };
-                    };
-                  };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-
-} CEU_Bird;
-
-
 typedef struct CEU_Main {
   struct tceu_org org;
-  tceu_trl trls_[ 8 ];
+  tceu_trl trls_[ 1 ];
   struct { /* BLOCK ln=1 */
     union {
       struct { /* BLOCK ln=1 */
-        #line 1 "<built-in>"
-int _ret_0;
         union {
             struct { /* BLOCK ln=1 */
-            u8 __fin_295_1: 1;
-            u8 __fin_295_2: 1;
-            u8 __fin_295_3: 1;
-              #line 10 "brawler.ceu"
-SDL_Window* win;
-              #line 17 "brawler.ceu"
-SDL_Renderer* ren;
               union {
                 union {
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                  union {
-                  };
-                      struct { /* BLOCK ln=14 */
-                        union {
-                        };
-                      };
-                  union {
-                  };
-                      struct { /* BLOCK ln=21 */
-                        union {
-                        };
-                      };
-                      struct { /* BLOCK ln=36 */
-                        union {
-                        };
-                      };
-                    struct { /* BLOCK ln=40 */
+                    struct { /* BLOCK ln=2 */
                       union {
+                          s32 __wclk_5;
                       };
                     };
-                  struct {
-                    struct { /* BLOCK ln=82 */
-                      union {
-                          union {
-                            struct { /* BLOCK ln=83 */
-                              union {
-                              };
-                            };
-                          };
-                      };
-                    };
-                    struct { /* BLOCK ln=87 */
-                      #line 87 "brawler.ceu"
-CEU_Bird b1_4;
-                    tceu_org_lnk __lnks_276_2[2];
-                      #line 92 "brawler.ceu"
-CEU_Bird b2_5;
-                    tceu_org_lnk __lnks_276_3[2];
-                      union {
-                            struct { /* BLOCK ln=88 */
-                              union {
-                              };
-                            };
-                            struct { /* BLOCK ln=93 */
-                              union {
-                              };
-                            };
-                      };
-                    };
-                    struct { /* BLOCK ln=99 */
-                      union {
-                          union {
-                            struct { /* BLOCK ln=100 */
-                              union {
-                              };
-                            };
-                          };
-                      };
-                    };
-                    struct { /* BLOCK ln=103 */
-                      union {
-                      };
-                    };
-                  };
-                  union {
-                  };
                 };
               };
             };
@@ -3406,30 +3178,10 @@ CEU_Bird b2_5;
 
 /* goto labels */
 enum {
-    Bird_ParEver_sub_2_0 = 0,
-    Bird_ParEver_out_1 = 1,
-    Bird_Awake_SDL_DT_2 = 2,
-    Bird_Awake_SDL_REDRAW_3 = 3,
-    Class_Bird = 4,
-    Bird_Class_free_Bird_5 = 5,
-    Main_Set_out_6 = 6,
-    Main_ParOr_sub_2_7 = 7,
-    Main_ParOr_sub_3_8 = 8,
-    Main_ParOr_sub_4_9 = 9,
-    Main_ParOr_out_10 = 10,
-    Main_Awake_SDL_REDRAW_11 = 11,
-    Main_Start_cnt_12 = 12,
-    Main_Start_cnt_13 = 13,
-    Main_Clear_14 = 14,
-    Main_Awake_SDL_REDRAW_15 = 15,
-    Main_Awake_SDL_QUIT_16 = 16,
-    Main_Clear_17 = 17,
-    Main_Block__fin_18 = 18,
-    Main_Block_fin_cnt_19 = 19,
-    Main_Clear_20 = 20,
-    Main_Clear_21 = 21,
-    Class_Main = 22,
-    Main_Class_free_Main_23 = 23,
+    Main_Set_out_0 = 0,
+    Main_Awake_DT_1 = 1,
+    Class_Main = 2,
+    Main_Class_free_Main_3 = 3,
 
 };
 
@@ -3505,76 +3257,6 @@ static void ceu_stack_clr () {
 #endif
 
 #ifdef CEU_ORGS
-static void _ceu_constr_254 (tceu_app* _ceu_app, tceu_org* __ceu_org, tceu_go* _ceu_go) {
-/* NODE: Dcl_constr 254 */
-/* NODE: Block 253 */
-
-#line 88 "brawler.ceu"
-    {/* NODE: Stmts 252 */
-
-#line 88 "brawler.ceu"
-    {/* NODE: SetExp 486 */
-
-#line 88 "brawler.ceu"
-/* SET: . */
-#line 88 "brawler.ceu"
-    ((CEU_Bird*)__ceu_org)->ren = ((CEU_Main*)_ceu_go->org)->ren;/* NODE: SetExp 487 */
-
-#line 89 "brawler.ceu"
-/* SET: . */
-#line 89 "brawler.ceu"
-    (((CEU_Bird*)__ceu_org)->r.y) = 100;/* NODE: SetExp 488 */
-
-#line 90 "brawler.ceu"
-/* SET: . */
-#line 90 "brawler.ceu"
-    ((CEU_Bird*)__ceu_org)->speed = 100;
-#line 88 "brawler.ceu"
-    }
-#line 88 "brawler.ceu"
-/* CLEAR: Block (88) */
-#line 88 "brawler.ceu"
-    }
-#line 88 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 4 ]; */
-}
-static void _ceu_constr_272 (tceu_app* _ceu_app, tceu_org* __ceu_org, tceu_go* _ceu_go) {
-/* NODE: Dcl_constr 272 */
-/* NODE: Block 271 */
-
-#line 93 "brawler.ceu"
-    {/* NODE: Stmts 270 */
-
-#line 93 "brawler.ceu"
-    {/* NODE: SetExp 489 */
-
-#line 93 "brawler.ceu"
-/* SET: . */
-#line 93 "brawler.ceu"
-    ((CEU_Bird*)__ceu_org)->ren = ((CEU_Main*)_ceu_go->org)->ren;/* NODE: SetExp 490 */
-
-#line 94 "brawler.ceu"
-/* SET: . */
-#line 94 "brawler.ceu"
-    (((CEU_Bird*)__ceu_org)->r.y) = 300;/* NODE: SetExp 491 */
-
-#line 95 "brawler.ceu"
-/* SET: . */
-#line 95 "brawler.ceu"
-    ((CEU_Bird*)__ceu_org)->speed = 200;
-#line 93 "brawler.ceu"
-    }
-#line 93 "brawler.ceu"
-/* CLEAR: Block (93) */
-#line 93 "brawler.ceu"
-    }
-#line 93 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 4 ]; */
-}
 
 #endif
 
@@ -3632,1012 +3314,98 @@ fprintf(stderr, "TRK: o.%p / l.%d\n", _ceu_go->org, _ceu_go->lbl);
 #endif
 
     switch (_ceu_go->lbl) {
-        /* NODE: Root 601 */
+        /* NODE: Root 36 */
 /* NODE: Dcl_cls 0 */
-
-#line 45 "brawler.ceu"
-case Class_Bird:;
-#line 45 "brawler.ceu"
-    #ifdef CEU_IFCS
-_ceu_go->org->cls = 0;
-#endif
-/* NODE: Block 480 */
-
-#line 45 "brawler.ceu"
-    {/* NODE: Stmts 479 */
-
-#line 45 "brawler.ceu"
-    {/* NODE: Block 228 */
-
-#line 50 "brawler.ceu"
-    {/* NODE: Stmts 227 */
-
-#line 50 "brawler.ceu"
-    {/* NODE: SetExp 433 */
-
-#line 50 "brawler.ceu"
-/* SET: . */
-#line 50 "brawler.ceu"
-    (((CEU_Bird*)_ceu_go->org)->r.x) = 20;/* NODE: SetExp 434 */
-
-#line 51 "brawler.ceu"
-/* SET: . */
-#line 51 "brawler.ceu"
-    (((CEU_Bird*)_ceu_go->org)->r.w) = 50;/* NODE: SetExp 435 */
-
-#line 52 "brawler.ceu"
-/* SET: . */
-#line 52 "brawler.ceu"
-    (((CEU_Bird*)_ceu_go->org)->r.h) = 45;/* NODE: Stmts 439 */
-
-#line 54 "brawler.ceu"
-    {/* NODE: Dcl_var 436 */
-/* NODE: SetExp 440 */
-
-#line 54 "brawler.ceu"
-/* SET: tex */
-#line 54 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->tex = HERO;
-#line 54 "brawler.ceu"
-    }/* NODE: ParEver 226 */
-
-#line 56 "brawler.ceu"
-/* ParEver: spawn subs */
-#line 56 "brawler.ceu"
-    /* TODO: function? */
-{
-    tceu_trl* trl = &_ceu_go->org->trls[ 1 ];
-    trl->evt = CEU_IN__STK;
-    trl->lbl = Bird_ParEver_sub_2_0;
-    trl->stk = _ceu_go->stki;
-}
-/* NODE: Block 218 */
-
-#line 57 "brawler.ceu"
-    {/* NODE: Stmts 217 */
-
-#line 57 "brawler.ceu"
-    {/* NODE: Stmts 444 */
-
-#line 57 "brawler.ceu"
-    {/* NODE: Dcl_var 441 */
-/* NODE: SetExp 445 */
-
-#line 57 "brawler.ceu"
-/* SET: sin */
-#line 57 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->sin_5 = 0;
-#line 57 "brawler.ceu"
-    }/* NODE: Stmts 449 */
-
-#line 58 "brawler.ceu"
-    {/* NODE: Dcl_var 446 */
-/* NODE: SetExp 450 */
-
-#line 58 "brawler.ceu"
-/* SET: y */
-#line 58 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->y_6 = (((CEU_Bird*)_ceu_go->org)->r.y);
-#line 58 "brawler.ceu"
-    }/* NODE: Stmts 452 */
-
-#line 59 "brawler.ceu"
-    {/* NODE: Dcl_var 451 */
-
-#line 59 "brawler.ceu"
-    }/* NODE: Stmts 456 */
-
-#line 60 "brawler.ceu"
-    {/* NODE: Dcl_var 453 */
-/* NODE: SetExp 457 */
-
-#line 60 "brawler.ceu"
-/* SET: x */
-#line 60 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->x_8 = (((CEU_Bird*)_ceu_go->org)->r.x);
-#line 60 "brawler.ceu"
-    }/* NODE: Loop 461 */
-
-#line 61 "brawler.ceu"
-    for (;;) {
-/* NODE: Stmts 460 */
-
-#line 61 "brawler.ceu"
-    {/* NODE: Stmts 462 */
-
-#line 61 "brawler.ceu"
-    {/* NODE: AwaitExt 458 */
-
-#line 61 "brawler.ceu"
-        _ceu_go->trl->evt = CEU_IN_SDL_DT;
-    _ceu_go->trl->lbl = Bird_Awake_SDL_DT_2;
-
-#line 61 "brawler.ceu"
-    	return RET_HALT;
-#line 61 "brawler.ceu"
-    case Bird_Awake_SDL_DT_2:;
-
-#line 61 "brawler.ceu"
-    #ifdef CEU_DEBUG_TRAILS
-#ifndef CEU_OS
-fprintf(stderr, "\tOK!\n");
-#endif
-#endif
-/* NODE: SetExp 464 */
-
-#line 61 "brawler.ceu"
-/* SET: dt */
-#line 61 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->dt_7 = (_ceu_go->evtp.v);
-#line 61 "brawler.ceu"
-    }/* NODE: Block 215 */
-
-#line 62 "brawler.ceu"
-    {
-#line 62 "brawler.ceu"
-    float __ceu_v_9
-#line 62 "brawler.ceu"
-    ;/* NODE: Stmts 214 */
-
-#line 62 "brawler.ceu"
-    {/* NODE: Stmts 468 */
-
-#line 62 "brawler.ceu"
-    {/* NODE: Dcl_var 465 */
-/* NODE: SetExp 469 */
-
-#line 62 "brawler.ceu"
-/* SET: v */
-#line 62 "brawler.ceu"
-    __ceu_v_9 = (((CEU_Bird*)_ceu_go->org)->dt_7*((CEU_Bird*)_ceu_go->org)->speed);
-#line 62 "brawler.ceu"
-    }/* NODE: SetExp 470 */
-
-#line 63 "brawler.ceu"
-/* SET: x */
-#line 63 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->x_8 = (((CEU_Bird*)_ceu_go->org)->x_8+(__ceu_v_9/1000));/* NODE: SetExp 471 */
-
-#line 64 "brawler.ceu"
-/* SET: . */
-#line 64 "brawler.ceu"
-    (((CEU_Bird*)_ceu_go->org)->r.x) = ((CEU_Bird*)_ceu_go->org)->x_8;/* NODE: SetExp 472 */
-
-#line 65 "brawler.ceu"
-/* SET: . */
-#line 65 "brawler.ceu"
-    (((CEU_Bird*)_ceu_go->org)->r.y) = (((CEU_Bird*)_ceu_go->org)->y_6+((((CEU_Bird*)_ceu_go->org)->speed/5)*sin(((CEU_Bird*)_ceu_go->org)->sin_5)));/* NODE: SetExp 473 */
-
-#line 67 "brawler.ceu"
-/* SET: sin */
-#line 67 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->sin_5 = (((CEU_Bird*)_ceu_go->org)->sin_5+((3.14*__ceu_v_9)/100000));/* NODE: If 213 */
-
-#line 68 "brawler.ceu"
-    if (((((int)((((CEU_Bird*)_ceu_go->org)->sin_5+(3.14/2))/3.14))%2)==0)) {
-/* NODE: Block 207 */
-
-#line 69 "brawler.ceu"
-    {/* NODE: Stmts 206 */
-
-#line 69 "brawler.ceu"
-    {/* NODE: SetExp 474 */
-
-#line 69 "brawler.ceu"
-/* SET: tex */
-#line 69 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->tex = HERO;
-#line 69 "brawler.ceu"
-    }
-#line 69 "brawler.ceu"
-/* CLEAR: Block (69) */
-#line 69 "brawler.ceu"
-    }
-#line 69 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-} else {
-/* NODE: Block 212 */
-
-#line 71 "brawler.ceu"
-    {/* NODE: Stmts 211 */
-
-#line 71 "brawler.ceu"
-    {/* NODE: SetExp 475 */
-
-#line 71 "brawler.ceu"
-/* SET: tex */
-#line 71 "brawler.ceu"
-    ((CEU_Bird*)_ceu_go->org)->tex = HERO;
-#line 71 "brawler.ceu"
-    }
-#line 71 "brawler.ceu"
-/* CLEAR: Block (71) */
-#line 71 "brawler.ceu"
-    }
-#line 71 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-}
-
-#line 62 "brawler.ceu"
-    }
-#line 62 "brawler.ceu"
-/* CLEAR: Block (62) */
-#line 62 "brawler.ceu"
-    }
-#line 62 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-
-#line 61 "brawler.ceu"
-    }
-#line 61 "brawler.ceu"
-    }
-
-#line 57 "brawler.ceu"
-    }
-#line 57 "brawler.ceu"
-/* CLEAR: Block (57) */
-#line 57 "brawler.ceu"
-    }
-#line 56 "brawler.ceu"
-case Bird_ParEver_sub_2_0:;/* NODE: Block 225 */
-
-#line 75 "brawler.ceu"
-    {/* NODE: Stmts 224 */
-
-#line 75 "brawler.ceu"
-    {/* NODE: Loop 478 */
-
-#line 75 "brawler.ceu"
-    for (;;) {
-/* NODE: Stmts 477 */
-
-#line 75 "brawler.ceu"
-    {/* NODE: AwaitExt 476 */
-
-#line 75 "brawler.ceu"
-        _ceu_go->trl->evt = CEU_IN_SDL_REDRAW;
-    _ceu_go->trl->lbl = Bird_Awake_SDL_REDRAW_3;
-
-#line 75 "brawler.ceu"
-    	return RET_HALT;
-#line 75 "brawler.ceu"
-    case Bird_Awake_SDL_REDRAW_3:;
-
-#line 75 "brawler.ceu"
-    #ifdef CEU_DEBUG_TRAILS
-#ifndef CEU_OS
-fprintf(stderr, "\tOK!\n");
-#endif
-#endif
-/* NODE: Block 222 */
-
-#line 76 "brawler.ceu"
-    {/* NODE: Stmts 221 */
-
-#line 76 "brawler.ceu"
-    {/* NODE: CallStmt 220 */
-
-#line 76 "brawler.ceu"
-    SDL_RenderCopy(((CEU_Bird*)_ceu_go->org)->ren,((CEU_Bird*)_ceu_go->org)->tex,NULL,(&((CEU_Bird*)_ceu_go->org)->r));
-#line 76 "brawler.ceu"
-    }
-#line 76 "brawler.ceu"
-/* CLEAR: Block (76) */
-#line 76 "brawler.ceu"
-    }
-#line 76 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 1 ]; */
-
-#line 75 "brawler.ceu"
-    }
-#line 75 "brawler.ceu"
-    }
-
-#line 75 "brawler.ceu"
-    }
-#line 75 "brawler.ceu"
-/* CLEAR: Block (75) */
-#line 75 "brawler.ceu"
-    }
-#line 50 "brawler.ceu"
-    }
-#line 50 "brawler.ceu"
-/* CLEAR: Block (50) */
-#line 50 "brawler.ceu"
-    }
-#line 45 "brawler.ceu"
-    }
-#line 45 "brawler.ceu"
-/* CLEAR: Block (45) */
-#line 45 "brawler.ceu"
-    }/* NODE: Dcl_cls 1 */
 
 #line 1 "<built-in>"
 case Class_Main:;
 #line 1 "<built-in>"
     #ifdef CEU_IFCS
-_ceu_go->org->cls = 1;
+_ceu_go->org->cls = 0;
 #endif
-/* NODE: Block 500 */
+/* NODE: Block 32 */
 
 #line 1 "<built-in>"
-    {/* NODE: Stmts 499 */
+    {/* NODE: Stmts 31 */
 
 #line 1 "<built-in>"
-    {/* NODE: Nothing 307 */
-/* NODE: Block 301 */
+    {/* NODE: Nothing 26 */
+/* NODE: Block 20 */
 
 #line 1 "<built-in>"
-    {/* NODE: Stmts 300 */
-
-#line 1 "<built-in>"
-    {/* NODE: Dcl_var 297 */
-/* NODE: SetBlock 299 */
-/* NODE: Block 295 */
-
-#line 1 "<built-in>"
-    /*  FINALIZE */
-_ceu_go->org->trls[ 7 ].evt   = CEU_IN__CLEAR;
-_ceu_go->org->trls[ 7 ].lbl   = Main_Block__fin_18;
-_ceu_go->org->trls[ 7 ].seqno = _ceu_app->seqno-1; /* awake now */
-
-#line 1 "<built-in>"
-    ((CEU_Main*)_ceu_go->org)->__fin_295_1 = 0;
-#line 1 "<built-in>"
-    ((CEU_Main*)_ceu_go->org)->__fin_295_2 = 0;
-#line 1 "<built-in>"
-    ((CEU_Main*)_ceu_go->org)->__fin_295_3 = 0;
-#line 1 "<built-in>"
-    {/* NODE: Stmts 294 */
-
-#line 1 "<built-in>"
-    {/* NODE: Stmts 291 */
-
-#line 4 "sdl.ceu"
-    {/* NODE: Stmts 313 */
-
-#line 4 "sdl.ceu"
-    {/* NODE: Nothing 503 */
-/* NODE: Nothing 504 */
-
-#line 4 "sdl.ceu"
-    }/* NODE: Stmts 317 */
-
-#line 5 "sdl.ceu"
-    {/* NODE: Nothing 505 */
-/* NODE: Nothing 506 */
-/* NODE: Nothing 507 */
-
-#line 5 "sdl.ceu"
-    }/* NODE: Stmts 323 */
-
-#line 7 "sdl.ceu"
-    {/* NODE: Nothing 508 */
-/* NODE: Nothing 509 */
-/* NODE: Nothing 510 */
-/* NODE: Nothing 511 */
-/* NODE: Nothing 512 */
-
-#line 7 "sdl.ceu"
-    }/* NODE: Stmts 343 */
-
-#line 11 "sdl.ceu"
-    {/* NODE: Nothing 513 */
-/* NODE: Nothing 514 */
-/* NODE: Nothing 515 */
-/* NODE: Nothing 516 */
-/* NODE: Nothing 517 */
-/* NODE: Nothing 518 */
-/* NODE: Nothing 519 */
-/* NODE: Nothing 520 */
-/* NODE: Nothing 521 */
-/* NODE: Nothing 522 */
-/* NODE: Nothing 523 */
-/* NODE: Nothing 524 */
-/* NODE: Nothing 525 */
-/* NODE: Nothing 526 */
-/* NODE: Nothing 527 */
-/* NODE: Nothing 528 */
-/* NODE: Nothing 529 */
-/* NODE: Nothing 530 */
-/* NODE: Nothing 531 */
-
-#line 11 "sdl.ceu"
-    }/* NODE: Stmts 348 */
-
-#line 29 "sdl.ceu"
-    {/* NODE: Nothing 532 */
-/* NODE: Nothing 533 */
-/* NODE: Nothing 534 */
-/* NODE: Nothing 535 */
-
-#line 29 "sdl.ceu"
-    }/* NODE: Stmts 401 */
-
-#line 34 "sdl.ceu"
-    {/* NODE: Nothing 536 */
-/* NODE: Nothing 537 */
-/* NODE: Nothing 538 */
-/* NODE: Nothing 539 */
-/* NODE: Nothing 540 */
-/* NODE: Nothing 541 */
-/* NODE: Nothing 542 */
-/* NODE: Nothing 543 */
-/* NODE: Nothing 544 */
-/* NODE: Nothing 545 */
-/* NODE: Nothing 546 */
-/* NODE: Nothing 547 */
-/* NODE: Nothing 548 */
-/* NODE: Nothing 549 */
-/* NODE: Nothing 550 */
-/* NODE: Nothing 551 */
-/* NODE: Nothing 552 */
-/* NODE: Nothing 553 */
-/* NODE: Nothing 554 */
-/* NODE: Nothing 555 */
-/* NODE: Nothing 556 */
-/* NODE: Nothing 557 */
-/* NODE: Nothing 558 */
-/* NODE: Nothing 559 */
-/* NODE: Nothing 560 */
-/* NODE: Nothing 561 */
-/* NODE: Nothing 562 */
-/* NODE: Nothing 563 */
-/* NODE: Nothing 564 */
-/* NODE: Nothing 565 */
-/* NODE: Nothing 566 */
-/* NODE: Nothing 567 */
-/* NODE: Nothing 568 */
-/* NODE: Nothing 569 */
-/* NODE: Nothing 570 */
-/* NODE: Nothing 571 */
-/* NODE: Nothing 572 */
-/* NODE: Nothing 573 */
-/* NODE: Nothing 574 */
-/* NODE: Nothing 575 */
-/* NODE: Nothing 576 */
-/* NODE: Nothing 577 */
-/* NODE: Nothing 578 */
-/* NODE: Nothing 579 */
-/* NODE: Nothing 580 */
-/* NODE: Nothing 581 */
-/* NODE: Nothing 582 */
-/* NODE: Nothing 583 */
-/* NODE: Nothing 584 */
-/* NODE: Nothing 585 */
-/* NODE: Nothing 586 */
-/* NODE: Nothing 587 */
-
-#line 34 "sdl.ceu"
-    }/* NODE: Stmts 410 */
-
-#line 87 "sdl.ceu"
-    {/* NODE: Nothing 588 */
-/* NODE: Nothing 589 */
-/* NODE: Nothing 590 */
-/* NODE: Nothing 591 */
-/* NODE: Nothing 592 */
-/* NODE: Nothing 593 */
-/* NODE: Nothing 594 */
-/* NODE: Nothing 595 */
-
-#line 87 "sdl.ceu"
-    }/* NODE: Host 51 */
-/* NODE: Stmts 412 */
-
-#line 6 "brawler.ceu"
-    {/* NODE: Nothing 596 */
-
-#line 6 "brawler.ceu"
-    }/* NODE: Stmts 414 */
-
-#line 7 "brawler.ceu"
-    {/* NODE: Nothing 597 */
-
-#line 7 "brawler.ceu"
-    }/* NODE: Stmts 416 */
-
-#line 8 "brawler.ceu"
-    {/* NODE: Nothing 598 */
-
-#line 8 "brawler.ceu"
-    }/* NODE: Stmts 418 */
-
-#line 10 "brawler.ceu"
-    {/* NODE: Dcl_var 417 */
-
-#line 10 "brawler.ceu"
-    }/* NODE: Finalize 75 */
-
-#line 11 "brawler.ceu"
-    ((CEU_Main*)_ceu_go->org)->__fin_295_3 = 1;/* NODE: SetExp 419 */
-
-#line 12 "brawler.ceu"
-/* SET: win */
-#line 12 "brawler.ceu"
-    ((CEU_Main*)_ceu_go->org)->win = SDL_CreateWindow("Hero Brawler",10,10,640,480,0);/* NODE: Stmts 421 */
-
-#line 17 "brawler.ceu"
-    {/* NODE: Dcl_var 420 */
-
-#line 17 "brawler.ceu"
-    }/* NODE: Finalize 91 */
-
-#line 18 "brawler.ceu"
-    ((CEU_Main*)_ceu_go->org)->__fin_295_2 = 1;/* NODE: SetExp 422 */
-
-#line 19 "brawler.ceu"
-/* SET: ren */
-#line 19 "brawler.ceu"
-    ((CEU_Main*)_ceu_go->org)->ren = SDL_CreateRenderer(((CEU_Main*)_ceu_go->org)->win,(-1),0);/* NODE: Host 92 */
-/* NODE: Finalize 104 */
-
-#line 33 "brawler.ceu"
-    ((CEU_Main*)_ceu_go->org)->__fin_295_1 = 1;/* NODE: SetExp 423 */
-
-#line 34 "brawler.ceu"
-/* SET: _HERO */
-#line 34 "brawler.ceu"
-    HERO = IMG_LoadTexture(((CEU_Main*)_ceu_go->org)->ren,"charmander.png");/* NODE: If 425 */
-
-#line 39 "brawler.ceu"
-    if ((HERO==NULL)) {
-/* NODE: Block 110 */
-
-#line 40 "brawler.ceu"
-    {/* NODE: Stmts 109 */
-
-#line 40 "brawler.ceu"
-    {/* NODE: CallStmt 108 */
-
-#line 40 "brawler.ceu"
-    printf("SDL_Init failed: %s\n",SDL_GetError());
-#line 40 "brawler.ceu"
-    }
-#line 40 "brawler.ceu"
-/* CLEAR: Block (40) */
-#line 40 "brawler.ceu"
-    }
-#line 40 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-} else {
-/* NODE: Nothing 424 */
-}
-/* NODE: Nothing 599 */
-/* NODE: ParOr 288 */
-
-#line 81 "brawler.ceu"
-/* ParOr: spawn subs */
-#line 81 "brawler.ceu"
-    /* TODO: function? */
-{
-    tceu_trl* trl = &_ceu_go->org->trls[ 1 ];
-    trl->evt = CEU_IN__STK;
-    trl->lbl = Main_ParOr_sub_2_7;
-    trl->stk = _ceu_go->stki;
-}
-
-#line 81 "brawler.ceu"
-    /* TODO: function? */
-{
-    tceu_trl* trl = &_ceu_go->org->trls[ 5 ];
-    trl->evt = CEU_IN__STK;
-    trl->lbl = Main_ParOr_sub_3_8;
-    trl->stk = _ceu_go->stki;
-}
-
-#line 81 "brawler.ceu"
-    /* TODO: function? */
-{
-    tceu_trl* trl = &_ceu_go->org->trls[ 6 ];
-    trl->evt = CEU_IN__STK;
-    trl->lbl = Main_ParOr_sub_4_9;
-    trl->stk = _ceu_go->stki;
-}
-/* NODE: Block 237 */
-
-#line 82 "brawler.ceu"
-    {/* NODE: Stmts 236 */
-
-#line 82 "brawler.ceu"
-    {/* NODE: Loop 485 */
-
-#line 82 "brawler.ceu"
-    for (;;) {
-/* NODE: Stmts 484 */
-
-#line 82 "brawler.ceu"
-    {/* NODE: AwaitExt 483 */
-
-#line 82 "brawler.ceu"
-        _ceu_go->trl->evt = CEU_IN_SDL_REDRAW;
-    _ceu_go->trl->lbl = Main_Awake_SDL_REDRAW_11;
-
-#line 82 "brawler.ceu"
-    	return RET_HALT;
-#line 82 "brawler.ceu"
-    case Main_Awake_SDL_REDRAW_11:;
-
-#line 82 "brawler.ceu"
-    #ifdef CEU_DEBUG_TRAILS
-#ifndef CEU_OS
-fprintf(stderr, "\tOK!\n");
-#endif
-#endif
-/* NODE: Block 234 */
-
-#line 83 "brawler.ceu"
-    {/* NODE: Stmts 233 */
-
-#line 83 "brawler.ceu"
-    {/* NODE: CallStmt 231 */
-
-#line 83 "brawler.ceu"
-    SDL_SetRenderDrawColor(((CEU_Main*)_ceu_go->org)->ren,0x00,0x00,0x00,0);/* NODE: CallStmt 232 */
-
-#line 84 "brawler.ceu"
-    SDL_RenderFillRect(((CEU_Main*)_ceu_go->org)->ren,NULL);
-#line 83 "brawler.ceu"
-    }
-#line 83 "brawler.ceu"
-/* CLEAR: Block (83) */
-#line 83 "brawler.ceu"
-    }
-#line 83 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-
-#line 82 "brawler.ceu"
-    }
-#line 82 "brawler.ceu"
-    }
-
-#line 82 "brawler.ceu"
-    }
-#line 82 "brawler.ceu"
-/* CLEAR: Block (82) */
-#line 82 "brawler.ceu"
-    }
-#line 81 "brawler.ceu"
-case Main_ParOr_sub_2_7:;/* NODE: Block 276 */
-
-#line 87 "brawler.ceu"
     {
-#line 87 "brawler.ceu"
-    /* TODO: CEU_OS */
-ceu_out_org_trail(_ceu_go->org, 2, (tceu_org_lnk*) &((CEU_Main*)_ceu_go->org)->__lnks_276_2);
+#line 1 "<built-in>"
+    int __ceu__ret_0
+#line 1 "<built-in>"
+    ;/* NODE: Stmts 19 */
 
-#line 87 "brawler.ceu"
-    /* TODO: CEU_OS */
-ceu_out_org_trail(_ceu_go->org, 3, (tceu_org_lnk*) &((CEU_Main*)_ceu_go->org)->__lnks_276_3);
+#line 1 "<built-in>"
+    {/* NODE: Dcl_var 16 */
+/* NODE: SetBlock 18 */
+/* NODE: Block 14 */
 
-#line 87 "brawler.ceu"
-    /* switch to blk trail */
-_ceu_go->trl = &_ceu_go->org->trls[ 4 ];
-/* NODE: Stmts 275 */
+#line 1 "<built-in>"
+    {/* NODE: Stmts 13 */
 
-#line 87 "brawler.ceu"
-    {/* NODE: Dcl_var 255 */
+#line 1 "<built-in>"
+    {/* NODE: Stmts 10 */
 
-#line 87 "brawler.ceu"
-/* start org: b1 */
-#line 87 "brawler.ceu"
-    /* each org has its own trail on enclosing block */
-{
-    int i;
-    for (i=0; i<1; i++) {
-        /* resets org memory and starts org.trail[0]=Class_XXX */
-        ceu_out_org(_ceu_app, ((tceu_org*) (&((CEU_Main*)_ceu_go->org)->b1_4)),3,Class_Bird,
-                _ceu_go->stki+1,    /* run now */
-#ifdef CEU_NEWS
-                0,
-#endif
-_ceu_go->org, 2);
-/* TODO: currently idx is always "1" for all interfaces access because pools 
- * are all together there. When we have separate trls for pools, we'll have to 
- * indirectly access the offset in the interface. */
+#line 1 "h.ceu"
+    {/* NODE: Loop 30 */
 
-#line 87 "brawler.ceu"
-            _ceu_constr_254(_ceu_app, ((tceu_org*) (&((CEU_Main*)_ceu_go->org)->b1_4)), _ceu_go);
-
-#line 87 "brawler.ceu"
-        }
-}
-
-#line 87 "brawler.ceu"
-    /* TODO: CEU_OS */
-    return ceu_out_org_spawn(_ceu_go, Main_Start_cnt_12,((tceu_org*) (&((CEU_Main*)_ceu_go->org)->b1_4)),Class_Bird);
-case Main_Start_cnt_12:;
-/* NODE: Dcl_var 273 */
-
-#line 92 "brawler.ceu"
-/* start org: b2 */
-#line 92 "brawler.ceu"
-    /* each org has its own trail on enclosing block */
-{
-    int i;
-    for (i=0; i<1; i++) {
-        /* resets org memory and starts org.trail[0]=Class_XXX */
-        ceu_out_org(_ceu_app, ((tceu_org*) (&((CEU_Main*)_ceu_go->org)->b2_5)),3,Class_Bird,
-                _ceu_go->stki+1,    /* run now */
-#ifdef CEU_NEWS
-                0,
-#endif
-_ceu_go->org, 3);
-/* TODO: currently idx is always "1" for all interfaces access because pools 
- * are all together there. When we have separate trls for pools, we'll have to 
- * indirectly access the offset in the interface. */
-
-#line 92 "brawler.ceu"
-            _ceu_constr_272(_ceu_app, ((tceu_org*) (&((CEU_Main*)_ceu_go->org)->b2_5)), _ceu_go);
-
-#line 92 "brawler.ceu"
-        }
-}
-
-#line 92 "brawler.ceu"
-    /* TODO: CEU_OS */
-    return ceu_out_org_spawn(_ceu_go, Main_Start_cnt_13,((tceu_org*) (&((CEU_Main*)_ceu_go->org)->b2_5)),Class_Bird);
-case Main_Start_cnt_13:;
-/* NODE: AwaitN 274 */
-
-#line 97 "brawler.ceu"
-    	return RET_HALT;
-#line 87 "brawler.ceu"
-    }
-#line 87 "brawler.ceu"
-/* CLEAR: Block (87) */
-#line 87 "brawler.ceu"
-    }
-#line 81 "brawler.ceu"
-case Main_ParOr_sub_3_8:;/* NODE: Block 283 */
-
-#line 99 "brawler.ceu"
-    {/* NODE: Stmts 282 */
-
-#line 99 "brawler.ceu"
-    {/* NODE: Loop 494 */
-
-#line 99 "brawler.ceu"
+#line 1 "h.ceu"
     for (;;) {
-/* NODE: Stmts 493 */
+/* NODE: Block 8 */
 
-#line 99 "brawler.ceu"
-    {/* NODE: AwaitExt 492 */
+#line 2 "h.ceu"
+    {/* NODE: Stmts 7 */
 
-#line 99 "brawler.ceu"
-        _ceu_go->trl->evt = CEU_IN_SDL_REDRAW;
-    _ceu_go->trl->lbl = Main_Awake_SDL_REDRAW_15;
+#line 2 "h.ceu"
+    {/* NODE: AwaitT 5 */
 
-#line 99 "brawler.ceu"
+#line 2 "h.ceu"
+    ceu_out_wclock(_ceu_app, (s32)((s32)1000000), &((CEU_Main*)_ceu_go->org)->__wclk_5, NULL);
+_CEU_NO_5_:
+    _ceu_go->trl->evt = CEU_IN__WCLOCK;
+    _ceu_go->trl->lbl = Main_Awake_DT_1;
+
+#line 2 "h.ceu"
     	return RET_HALT;
-#line 99 "brawler.ceu"
-    case Main_Awake_SDL_REDRAW_15:;
+#line 2 "h.ceu"
+    case Main_Awake_DT_1:;
 
-#line 99 "brawler.ceu"
+#line 2 "h.ceu"
+        if (!ceu_out_wclock(_ceu_app, _ceu_go->evtp.dt, NULL, &((CEU_Main*)_ceu_go->org)->__wclk_5) )
+        goto _CEU_NO_5_;
+
+#line 2 "h.ceu"
     #ifdef CEU_DEBUG_TRAILS
 #ifndef CEU_OS
 fprintf(stderr, "\tOK!\n");
 #endif
 #endif
-/* NODE: Block 280 */
+/* NODE: CallStmt 6 */
 
-#line 100 "brawler.ceu"
-    {/* NODE: Stmts 279 */
-
-#line 100 "brawler.ceu"
-    {/* NODE: CallStmt 278 */
-
-#line 100 "brawler.ceu"
-    SDL_RenderPresent(((CEU_Main*)_ceu_go->org)->ren);
-#line 100 "brawler.ceu"
+#line 3 "h.ceu"
+    printf("Hello world!\n");
+#line 2 "h.ceu"
     }
-#line 100 "brawler.ceu"
-/* CLEAR: Block (100) */
-#line 100 "brawler.ceu"
+#line 2 "h.ceu"
+/* CLEAR: Block (2) */
+#line 2 "h.ceu"
     }
-#line 100 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 5 ]; */
-
-#line 99 "brawler.ceu"
-    }
-#line 99 "brawler.ceu"
-    }
-
-#line 99 "brawler.ceu"
-    }
-#line 99 "brawler.ceu"
-/* CLEAR: Block (99) */
-#line 99 "brawler.ceu"
-    }
-#line 81 "brawler.ceu"
-case Main_ParOr_sub_4_9:;/* NODE: Block 287 */
-
-#line 103 "brawler.ceu"
-    {/* NODE: Stmts 286 */
-
-#line 103 "brawler.ceu"
-    {/* NODE: AwaitExt 285 */
-
-#line 103 "brawler.ceu"
-        _ceu_go->trl->evt = CEU_IN_SDL_QUIT;
-    _ceu_go->trl->lbl = Main_Awake_SDL_QUIT_16;
-
-#line 103 "brawler.ceu"
-    	return RET_HALT;
-#line 103 "brawler.ceu"
-    case Main_Awake_SDL_QUIT_16:;
-
-#line 103 "brawler.ceu"
-    #ifdef CEU_DEBUG_TRAILS
-#ifndef CEU_OS
-fprintf(stderr, "\tOK!\n");
-#endif
-#endif
-
-#line 103 "brawler.ceu"
-    }
-#line 103 "brawler.ceu"
-/* CLEAR: Block (103) */
-#line 103 "brawler.ceu"
-    }
-#line 103 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 6 ]; */
-
-#line 81 "brawler.ceu"
-/* PAROR JOIN */
-#line 81 "brawler.ceu"
-    _ceu_go->lbl = Main_ParOr_out_10;
-goto _CEU_GOTO_;
-/*return RET_GOTO;*/
-
-#line 81 "brawler.ceu"
-case Main_ParOr_out_10:;
-#line 81 "brawler.ceu"
-/* CLEAR: ParOr (81) */
-#line 81 "brawler.ceu"
-    /* trails[1] points to ORG blk */
-{
-    tceu_trl* trl = &_ceu_go->org->trls[ 0 ];
-    trl->evt = CEU_IN__STK;
-    trl->stk = _ceu_go->stki;
-    trl->lbl = Main_Clear_17;
-}
-return ceu_out_clear(_ceu_go, 1,                     &_ceu_go->org->trls[ 7 ]);
-
-case Main_Clear_17:;
-
-#line 81 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-_ceu_go->trl = &_ceu_go->org->trls[ 0 ];
-/* NODE: Stmts 498 */
-
-#line 106 "brawler.ceu"
-    {/* NODE: SetExp 496 */
-
-#line 106 "brawler.ceu"
-/* SET: _ret */
-#line 106 "brawler.ceu"
-    ((CEU_Main*)_ceu_go->org)->_ret_0 = 0;
-#line 106 "brawler.ceu"
-    #ifdef CEU_RET
-    _ceu_app->ret = ((CEU_Main*)_ceu_go->org)->_ret_0;
-#endif
-/* NODE: Escape 497 */
-
-#line 106 "brawler.ceu"
-    _ceu_go->lbl = Main_Set_out_6;
-goto _CEU_GOTO_;
-/*return RET_GOTO;*/
-
-#line 106 "brawler.ceu"
-    }
-#line 4 "sdl.ceu"
-    }
-#line 1 "<built-in>"
-    }
-#line 1 "<built-in>"
-    _ceu_go->lbl = Main_Block_fin_cnt_19;
-goto _CEU_GOTO_;
-/*return RET_GOTO;*/
-
-#line 1 "<built-in>"
-case Main_Block__fin_18:;
-#line 1 "<built-in>"
-    if (((CEU_Main*)_ceu_go->org)->__fin_295_1) {
-/* NODE: Finally 103 */
-/* NODE: Block 102 */
-
-#line 36 "brawler.ceu"
-    {/* NODE: Stmts 101 */
-
-#line 36 "brawler.ceu"
-    {/* NODE: CallStmt 100 */
-
-#line 36 "brawler.ceu"
-    SDL_DestroyTexture(HERO);
-#line 36 "brawler.ceu"
-    }
-#line 36 "brawler.ceu"
-/* CLEAR: Block (36) */
-#line 36 "brawler.ceu"
-    }
-#line 36 "brawler.ceu"
+#line 2 "h.ceu"
     /* switch to 1st trail */
 /* TODO: only if not joining with outer prio */
 /*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-}
 
-#line 1 "<built-in>"
-    if (((CEU_Main*)_ceu_go->org)->__fin_295_2) {
-/* NODE: Finally 90 */
-/* NODE: Block 89 */
-
-#line 21 "brawler.ceu"
-    {/* NODE: Stmts 88 */
-
-#line 21 "brawler.ceu"
-    {/* NODE: CallStmt 87 */
-
-#line 21 "brawler.ceu"
-    SDL_DestroyRenderer(((CEU_Main*)_ceu_go->org)->ren);
-#line 21 "brawler.ceu"
+#line 1 "h.ceu"
     }
-#line 21 "brawler.ceu"
-/* CLEAR: Block (21) */
-#line 21 "brawler.ceu"
+
+#line 1 "h.ceu"
     }
-#line 21 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-}
-
 #line 1 "<built-in>"
-    if (((CEU_Main*)_ceu_go->org)->__fin_295_3) {
-/* NODE: Finally 74 */
-/* NODE: Block 73 */
-
-#line 14 "brawler.ceu"
-    {/* NODE: Stmts 72 */
-
-#line 14 "brawler.ceu"
-    {/* NODE: CallStmt 71 */
-
-#line 14 "brawler.ceu"
-    SDL_DestroyWindow(((CEU_Main*)_ceu_go->org)->win);
-#line 14 "brawler.ceu"
     }
-#line 14 "brawler.ceu"
-/* CLEAR: Block (14) */
-#line 14 "brawler.ceu"
-    }
-#line 14 "brawler.ceu"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-}
-
-#line 1 "<built-in>"
-    	return RET_HALT;
-#line 1 "<built-in>"
-case Main_Block_fin_cnt_19:;
 #line 1 "<built-in>"
 /* CLEAR: Block (1) */
 #line 1 "<built-in>"
@@ -4645,26 +3413,7 @@ case Main_Block_fin_cnt_19:;
 #line 1 "<built-in>"
     	return RET_HALT;
 #line 1 "<built-in>"
-case Main_Set_out_6:;
-#line 1 "<built-in>"
-/* CLEAR: SetBlock (1) */
-#line 1 "<built-in>"
-    /* trails[1] points to ORG blk */
-{
-    tceu_trl* trl = &_ceu_go->org->trls[ 0 ];
-    trl->evt = CEU_IN__STK;
-    trl->stk = _ceu_go->stki;
-    trl->lbl = Main_Clear_21;
-}
-return ceu_out_clear(_ceu_go, 1,                     &_ceu_go->org->trls[ 8 ]);
-
-case Main_Clear_21:;
-
-#line 1 "<built-in>"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-_ceu_go->trl = &_ceu_go->org->trls[ 0 ];
-
+case Main_Set_out_0:;
 #line 1 "<built-in>"
     }
 #line 1 "<built-in>"
@@ -4672,31 +3421,11 @@ _ceu_go->trl = &_ceu_go->org->trls[ 0 ];
 #line 1 "<built-in>"
     }
 #line 1 "<built-in>"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-
-#line 1 "<built-in>"
     }
 #line 1 "<built-in>"
 /* CLEAR: Block (1) */
 #line 1 "<built-in>"
     }
-#line 1 "<built-in>"
-    /* switch to 1st trail */
-/* TODO: only if not joining with outer prio */
-/*_ceu_go->trl = &_ceu_go->org->trls[ 0 ]; */
-
-#line 1 "<built-in>"
-    #ifdef CEU_NEWS
-if (_ceu_go->org->isDyn) {
-    _ceu_go->org->isAlive = 0;
-    return ceu_out_clear(_ceu_go, 0, _ceu_go->org);
-}
-#endif
-
-#line 1 "<built-in>"
-    	return RET_END;
     }
     return RET_HALT;    /* TODO: should never be reached anyways */
 }

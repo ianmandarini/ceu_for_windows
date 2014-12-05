@@ -408,7 +408,7 @@ class Bird with
     var _SDL_Rect r;
     var int speed;
 do
-    this.r.x = 20;
+    this.r.x = 300;
     this.r.w = 50;
     this.r.h = 45;
 
@@ -421,8 +421,8 @@ do
         var float x = r.x;
         every dt in SDL_DT do
             var float v = dt*speed;
-            x = x + v/1000;
-            r.x = x;
+            //x = x + v/1000;
+            r.x = x + speed/5*_cos(sin);
             r.y = y + speed/5*_sin(sin);
 
             sin = sin + 3.14*v/100000;
