@@ -1,0 +1,471 @@
+# 1 "_ceu_cpp_birds-01.ceu.in"
+# 1 "<built-in>"
+#define __STDC__ 1
+#define __STDC_HOSTED__ 1
+#define __GNUC__ 4
+#define __GNUC_MINOR__ 6
+#define __GNUC_PATCHLEVEL__ 2
+#define __VERSION__ "4.6.2"
+#define __FINITE_MATH_ONLY__ 0
+#define __SIZEOF_INT__ 4
+#define __SIZEOF_LONG__ 4
+#define __SIZEOF_LONG_LONG__ 8
+#define __SIZEOF_SHORT__ 2
+#define __SIZEOF_FLOAT__ 4
+#define __SIZEOF_DOUBLE__ 8
+#define __SIZEOF_LONG_DOUBLE__ 12
+#define __SIZEOF_SIZE_T__ 4
+#define __CHAR_BIT__ 8
+#define __BIGGEST_ALIGNMENT__ 16
+#define __ORDER_LITTLE_ENDIAN__ 1234
+#define __ORDER_BIG_ENDIAN__ 4321
+#define __ORDER_PDP_ENDIAN__ 3412
+#define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+#define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
+#define __SIZEOF_POINTER__ 4
+#define __SIZE_TYPE__ unsigned int
+#define __PTRDIFF_TYPE__ int
+#define __WCHAR_TYPE__ short unsigned int
+#define __WINT_TYPE__ short unsigned int
+#define __INTMAX_TYPE__ long long int
+#define __UINTMAX_TYPE__ long long unsigned int
+#define __CHAR16_TYPE__ short unsigned int
+#define __CHAR32_TYPE__ unsigned int
+#define __SIG_ATOMIC_TYPE__ int
+#define __INT8_TYPE__ signed char
+#define __INT16_TYPE__ short int
+#define __INT32_TYPE__ int
+#define __INT64_TYPE__ long long int
+#define __UINT8_TYPE__ unsigned char
+#define __UINT16_TYPE__ short unsigned int
+#define __UINT32_TYPE__ unsigned int
+#define __UINT64_TYPE__ long long unsigned int
+#define __INT_LEAST8_TYPE__ signed char
+#define __INT_LEAST16_TYPE__ short int
+#define __INT_LEAST32_TYPE__ int
+#define __INT_LEAST64_TYPE__ long long int
+#define __UINT_LEAST8_TYPE__ unsigned char
+#define __UINT_LEAST16_TYPE__ short unsigned int
+#define __UINT_LEAST32_TYPE__ unsigned int
+#define __UINT_LEAST64_TYPE__ long long unsigned int
+#define __INT_FAST8_TYPE__ signed char
+#define __INT_FAST16_TYPE__ short int
+#define __INT_FAST32_TYPE__ int
+#define __INT_FAST64_TYPE__ long long int
+#define __UINT_FAST8_TYPE__ unsigned char
+#define __UINT_FAST16_TYPE__ short unsigned int
+#define __UINT_FAST32_TYPE__ unsigned int
+#define __UINT_FAST64_TYPE__ long long unsigned int
+#define __INTPTR_TYPE__ int
+#define __UINTPTR_TYPE__ unsigned int
+#define __GXX_ABI_VERSION 1002
+#define __USING_SJLJ_EXCEPTIONS__ 1
+#define __SCHAR_MAX__ 127
+#define __SHRT_MAX__ 32767
+#define __INT_MAX__ 2147483647
+#define __LONG_MAX__ 2147483647L
+#define __LONG_LONG_MAX__ 9223372036854775807LL
+#define __WCHAR_MAX__ 65535
+#define __WCHAR_MIN__ 0
+#define __WINT_MAX__ 65535
+#define __WINT_MIN__ 0
+#define __PTRDIFF_MAX__ 2147483647
+#define __SIZE_MAX__ 4294967295U
+#define __INTMAX_MAX__ 9223372036854775807LL
+#define __INTMAX_C(c) c ## LL
+#define __UINTMAX_MAX__ 18446744073709551615ULL
+#define __UINTMAX_C(c) c ## ULL
+#define __SIG_ATOMIC_MAX__ 2147483647
+#define __SIG_ATOMIC_MIN__ (-__SIG_ATOMIC_MAX__ - 1)
+#define __INT8_MAX__ 127
+#define __INT16_MAX__ 32767
+#define __INT32_MAX__ 2147483647
+#define __INT64_MAX__ 9223372036854775807LL
+#define __UINT8_MAX__ 255
+#define __UINT16_MAX__ 65535
+#define __UINT32_MAX__ 4294967295U
+#define __UINT64_MAX__ 18446744073709551615ULL
+#define __INT_LEAST8_MAX__ 127
+#define __INT8_C(c) c
+#define __INT_LEAST16_MAX__ 32767
+#define __INT16_C(c) c
+#define __INT_LEAST32_MAX__ 2147483647
+#define __INT32_C(c) c
+#define __INT_LEAST64_MAX__ 9223372036854775807LL
+#define __INT64_C(c) c ## LL
+#define __UINT_LEAST8_MAX__ 255
+#define __UINT8_C(c) c
+#define __UINT_LEAST16_MAX__ 65535
+#define __UINT16_C(c) c
+#define __UINT_LEAST32_MAX__ 4294967295U
+#define __UINT32_C(c) c ## U
+#define __UINT_LEAST64_MAX__ 18446744073709551615ULL
+#define __UINT64_C(c) c ## ULL
+#define __INT_FAST8_MAX__ 127
+#define __INT_FAST16_MAX__ 32767
+#define __INT_FAST32_MAX__ 2147483647
+#define __INT_FAST64_MAX__ 9223372036854775807LL
+#define __UINT_FAST8_MAX__ 255
+#define __UINT_FAST16_MAX__ 65535
+#define __UINT_FAST32_MAX__ 4294967295U
+#define __UINT_FAST64_MAX__ 18446744073709551615ULL
+#define __INTPTR_MAX__ 2147483647
+#define __UINTPTR_MAX__ 4294967295U
+#define __FLT_EVAL_METHOD__ 2
+#define __DEC_EVAL_METHOD__ 2
+#define __FLT_RADIX__ 2
+#define __FLT_MANT_DIG__ 24
+#define __FLT_DIG__ 6
+#define __FLT_MIN_EXP__ (-125)
+#define __FLT_MIN_10_EXP__ (-37)
+#define __FLT_MAX_EXP__ 128
+#define __FLT_MAX_10_EXP__ 38
+#define __FLT_DECIMAL_DIG__ 9
+#define __FLT_MAX__ 3.40282346638528859812e+38F
+#define __FLT_MIN__ 1.17549435082228750797e-38F
+#define __FLT_EPSILON__ 1.19209289550781250000e-7F
+#define __FLT_DENORM_MIN__ 1.40129846432481707092e-45F
+#define __FLT_HAS_DENORM__ 1
+#define __FLT_HAS_INFINITY__ 1
+#define __FLT_HAS_QUIET_NAN__ 1
+#define __DBL_MANT_DIG__ 53
+#define __DBL_DIG__ 15
+#define __DBL_MIN_EXP__ (-1021)
+#define __DBL_MIN_10_EXP__ (-307)
+#define __DBL_MAX_EXP__ 1024
+#define __DBL_MAX_10_EXP__ 308
+#define __DBL_DECIMAL_DIG__ 17
+#define __DBL_MAX__ ((double)1.79769313486231570815e+308L)
+#define __DBL_MIN__ ((double)2.22507385850720138309e-308L)
+#define __DBL_EPSILON__ ((double)2.22044604925031308085e-16L)
+#define __DBL_DENORM_MIN__ ((double)4.94065645841246544177e-324L)
+#define __DBL_HAS_DENORM__ 1
+#define __DBL_HAS_INFINITY__ 1
+#define __DBL_HAS_QUIET_NAN__ 1
+#define __LDBL_MANT_DIG__ 64
+#define __LDBL_DIG__ 18
+#define __LDBL_MIN_EXP__ (-16381)
+#define __LDBL_MIN_10_EXP__ (-4931)
+#define __LDBL_MAX_EXP__ 16384
+#define __LDBL_MAX_10_EXP__ 4932
+#define __DECIMAL_DIG__ 21
+#define __LDBL_MAX__ 1.18973149535723176502e+4932L
+#define __LDBL_MIN__ 3.36210314311209350626e-4932L
+#define __LDBL_EPSILON__ 1.08420217248550443401e-19L
+#define __LDBL_DENORM_MIN__ 3.64519953188247460253e-4951L
+#define __LDBL_HAS_DENORM__ 1
+#define __LDBL_HAS_INFINITY__ 1
+#define __LDBL_HAS_QUIET_NAN__ 1
+#define __DEC32_MANT_DIG__ 7
+#define __DEC32_MIN_EXP__ (-94)
+#define __DEC32_MAX_EXP__ 97
+#define __DEC32_MIN__ 1E-95DF
+#define __DEC32_MAX__ 9.999999E96DF
+#define __DEC32_EPSILON__ 1E-6DF
+#define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
+#define __DEC64_MANT_DIG__ 16
+#define __DEC64_MIN_EXP__ (-382)
+#define __DEC64_MAX_EXP__ 385
+#define __DEC64_MIN__ 1E-383DD
+#define __DEC64_MAX__ 9.999999999999999E384DD
+#define __DEC64_EPSILON__ 1E-15DD
+#define __DEC64_SUBNORMAL_MIN__ 0.000000000000001E-383DD
+#define __DEC128_MANT_DIG__ 34
+#define __DEC128_MIN_EXP__ (-6142)
+#define __DEC128_MAX_EXP__ 6145
+#define __DEC128_MIN__ 1E-6143DL
+#define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
+#define __DEC128_EPSILON__ 1E-33DL
+#define __DEC128_SUBNORMAL_MIN__ 0.000000000000000000000000000000001E-6143DL
+#define __REGISTER_PREFIX__ 
+#define __USER_LABEL_PREFIX__ _
+#define __GNUC_GNU_INLINE__ 1
+#define __NO_INLINE__ 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 1
+#define __PRAGMA_REDEFINE_EXTNAME 1
+#define __SIZEOF_WCHAR_T__ 2
+#define __SIZEOF_WINT_T__ 2
+#define __SIZEOF_PTRDIFF_T__ 4
+#define __i386 1
+#define __i386__ 1
+#define i386 1
+#define __i686 1
+#define __i686__ 1
+#define __pentiumpro 1
+#define __pentiumpro__ 1
+#define _X86_ 1
+#define __stdcall __attribute__((__stdcall__))
+#define __fastcall __attribute__((__fastcall__))
+#define __thiscall __attribute__((__thiscall__))
+#define __cdecl __attribute__((__cdecl__))
+#define _stdcall __attribute__((__stdcall__))
+#define _fastcall __attribute__((__fastcall__))
+#define _thiscall __attribute__((__thiscall__))
+#define _cdecl __attribute__((__cdecl__))
+#define __GXX_MERGED_TYPEINFO_NAMES 0
+#define __GXX_TYPEINFO_EQUALITY_INLINE 0
+#define __MSVCRT__ 1
+#define __MINGW32__ 1
+#define _WIN32 1
+#define __WIN32 1
+#define __WIN32__ 1
+#define WIN32 1
+#define __WINNT 1
+#define __WINNT__ 1
+#define WINNT 1
+#define _INTEGRAL_MAX_BITS 64
+#define __declspec(x) __attribute__((x))
+#define __DECIMAL_BID_FORMAT__ 1
+# 1 "<command-line>"
+#define _REENTRANCE 1
+# 1 "_ceu_cpp_birds-01.ceu.in"
+# 1 "birds-01.ceu"
+
+
+# 1 "sdl.ceu" 1
+
+#define _SDL_CEU 
+
+native @const _GL_SCISSOR_TEST, _GL_TEXTURE_2D;
+native _glEnable(), _glDisable(), _glScissor();
+
+native @plain _SDL_Rect, _SDL_Point, _SDL_Color,
+              _SDL_TouchFingerEvent,
+              _SDL_Texture;
+
+native @const _SDL_TRUE, _SDL_FALSE,
+              _SDL_BLENDMODE_NONE, _SDL_BLENDMODE_BLEND,
+              _SDL_BUTTON_LEFT,
+              _SDL_BUTTON_RIGHT,
+              _SDL_KEYDOWN,
+              _SDL_MOUSEBUTTONDOWN,
+              _SDL_PIXELFORMAT_UNKNOWN,
+              _SDL_SCANCODE_AC_BACK,
+              _SDL_RENDERER_ACCELERATED,
+              _SDL_RENDERER_PRESENTVSYNC,
+              _SDL_TEXTINPUT,
+              _SDL_TEXTUREACCESS_STATIC,
+              _SDL_TEXTUREACCESS_TARGET,
+              _SDL_WINDOW_SHOWN,
+              _SDL_WINDOW_RESIZABLE,
+              _SDL_WINDOWEVENT_RESIZED,
+              _AUDIO_S16SYS;
+
+native @const _SDLK_ESCAPE,
+              _SDLK_BACKSPACE,
+              _SDLK_RETURN,
+              _SDLK_p;
+
+native @nohold _SDL_GL_BindTexture(),
+               _SDL_CreateWindow(),
+               _SDL_CreateRenderer(),
+               _SDL_CreateSoftwareRenderer(),
+               _SDL_CreateTexture(),
+               _SDL_CreateTextureFromSurface(),
+               _SDL_FreeSurface(),
+               _SDL_GetMouseState(),
+               _SDL_GetRendererInfo(),
+               _SDL_GetRendererOutputSize(),
+               _SDL_GetWindowSize(),
+               _SDL_HasIntersection(),
+               _SDL_SetWindowFullscreen(),
+               _SDL_SetRenderDrawColor(),
+               _SDL_RenderClear(),
+               _SDL_RenderDrawLine(),
+               _SDL_RenderDrawRect(),
+               _SDL_RenderFillRect(),
+               _SDL_RenderCopy(),
+               _SDL_RenderPresent(),
+               _SDL_DestroyRenderer(),
+               _SDL_DestroyTexture(),
+               _SDL_DestroyWindow(),
+               _SDL_FreeSurface(),
+               _SDL_QueryTexture(),
+               _SDL_Quit(),
+               _SDL_Delay(),
+               _SDL_SetEventFilter(),
+               _SDL_SetRenderDrawBlendMode(),
+               _SDL_SetRenderTarget(),
+               _SDL_SetTextInputRect(),
+               _SDL_SetWindowDisplayMode(),
+               _SDL_SetWindowTitle(),
+               _SDL_StartTextInput(),
+               _SDL_StopTextInput(),
+               _IMG_LoadTexture(),
+               _TTF_CloseFont(),
+               _TTF_Init(),
+               _TTF_OpenFont(),
+               _TTF_Quit(),
+               _TTF_RenderText_Blended(),
+               _TTF_RenderText_Shaded(),
+               _TTF_RenderText_Solid(),
+               _TTF_SizeText(),
+               _Mix_LoadWAV(),
+               _Mix_FreeChunk(),
+               _Mix_FreeMusic(),
+               _Mix_PlayChannel(),
+               _Mix_PlayMusic(),
+               _Mix_Playing(),
+               _Mix_CloseAudio(),
+               _Mix_OpenAudio();
+
+native @nohold _SDL_Circle_vs_Mouse(),
+               _SDL_Circle_vs_Point(),
+               _SDL_Circle_vs_Circle(),
+               _SDL_Rect_vs_Mouse(),
+               _SDL_Rect_vs_Point(),
+               _SDL_Rect2Point(),
+               _SDL_Point2Rect(),
+               _SDL_Touch2Point();
+
+native do
+    int SDL_Rect_vs_Mouse (SDL_Rect* r, SDL_MouseButtonEvent* but) {
+        return (but->x >= r->x) && (but->x <= r->x+r->w)
+            && (but->y >= r->y) && (but->y <= r->y+r->h);
+    }
+    int SDL_Rect_vs_Point (SDL_Rect* r, SDL_Point* pt) {
+        return (pt->x >= r->x) && (pt->x <= r->x+r->w)
+            && (pt->y >= r->y) && (pt->y <= r->y+r->h);
+    }
+    SDL_Point* SDL_Touch2Point (SDL_Point* pt, SDL_TouchFingerEvent* e, int w, int h) {
+        pt->x = e->x * w;
+        pt->y = e->y * h;
+        return pt;
+    }
+
+    SDL_Point SDL_Rect2Point (SDL_Rect* r) {
+        SDL_Point pt = { r->x+r->w/2, r->y+r->h/2 };
+        return pt;
+    }
+    SDL_Rect SDL_Point2Rect (SDL_Point* pt, int radix) {
+        SDL_Rect r = { pt->x-radix, pt->y-radix, radix*2, radix*2 };
+        return r;
+    }
+
+##ifdef SDL_MATH
+    int SDL_Circle_vs_Mouse (SDL_Point* pos, int rad, SDL_MouseButtonEvent* but) {
+        SDL_Point pt = { but->x, but->y };
+        return SDL_Circle_vs_Point(pos, rad, &pt);
+    }
+
+    int SDL_Circle_vs_Point (SDL_Point* pos, int rad, SDL_Point* pt) {
+        return sqrt( pow(pos->x-pt->x,2) + pow(pos->y-pt->y,2) ) < rad;
+    }
+
+    int SDL_Circle_vs_Circle (SDL_Point* pos1, int rad1, SDL_Point* pos2, int rad2) {
+        return sqrt( pow(pos1->x-pos2->x,2) + pow(pos1->y-pos2->y,2) )
+                < rad1+rad2;
+    }
+##endif
+end
+# 4 "birds-01.ceu" 2
+
+input void SDL_QUIT;
+input void SDL_REDRAW;
+input int SDL_DT;
+
+var _SDL_Window[] win;
+finalize
+    win = _SDL_CreateWindow("Birds - 01 (class)", 10,10, 640,480, 0);
+with
+    _SDL_DestroyWindow(win);
+end
+
+var _SDL_Renderer[] ren;
+finalize
+    ren = _SDL_CreateRenderer(win, -1, 0);
+with
+    _SDL_DestroyRenderer(ren);
+end
+
+
+
+
+
+
+
+native do
+    SDL_Texture* TEX_UP, *TEX_DOWN;
+end
+    finalize
+        _TEX_UP = _IMG_LoadTexture(ren, "strangeloop-14/clumsy_up.png");
+    with
+        _SDL_DestroyTexture(_TEX_UP);
+    end
+    finalize
+        _TEX_DOWN = _IMG_LoadTexture(ren, "strangeloop-14/clumsy_down.png");
+    with
+        _SDL_DestroyTexture(_TEX_DOWN);
+    end
+
+    if _TEX_UP == null then
+             _printf("SDL_Init failed: %s\n", _SDL_GetError());
+    end
+
+#define PI 3.14
+
+class Bird with
+    var _SDL_Renderer[] ren;
+    var _SDL_Rect r;
+    var int speed;
+do
+    this.r.x = 20;
+    this.r.w = 50;
+    this.r.h = 45;
+
+    var _SDL_Texture[] tex = _TEX_DOWN;
+
+    par do
+        var float sin = 0;
+        var int y = r.y;
+        var int dt;
+        var float x = r.x;
+        every dt in SDL_DT do
+            var float v = dt*speed;
+            x = x + v/1000;
+            r.x = x;
+            r.y = y + speed/5*_sin(sin);
+
+            sin = sin + 3.14*v/100000;
+            if ((int)((sin+3.14/2)/3.14)) % 2 == 0 then
+                tex = _TEX_DOWN;
+            else
+                tex = _TEX_UP;
+            end
+        end
+    with
+        every SDL_REDRAW do
+            _SDL_RenderCopy(ren, tex, null, &r);
+        end
+    end
+end
+
+par/or do
+    every SDL_REDRAW do
+        _SDL_SetRenderDrawColor(ren, 0x00,0x00,0x00, 0);
+        _SDL_RenderFillRect(ren, null);
+    end
+with
+    var Bird b1 with
+        this.ren = ren;
+        this.r.y = 100;
+        this.speed = 100;
+    end;
+    var Bird b2 with
+        this.ren = ren;
+        this.r.y = 300;
+        this.speed = 200;
+    end;
+    await FOREVER;
+with
+    every SDL_REDRAW do
+        _SDL_RenderPresent(ren);
+    end
+with
+    await SDL_QUIT;
+end
+
+escape 0;

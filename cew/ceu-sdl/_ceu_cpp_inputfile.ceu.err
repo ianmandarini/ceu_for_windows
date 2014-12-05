@@ -1,0 +1,8 @@
+_ceu_cpp_inputfile.ceu.in:1:9: warning: universal character names are only valid in C++ and C99 [enabled by default]
+ #line 1 "C:\Users\Ian Albuquerque\Desktop\cew\h.ceu"
+         ^
+_ceu_cpp_inputfile.ceu.in:1:9: error: incomplete universal character name \U
+_ceu_cpp_inputfile.ceu.in:1:9: warning: unknown escape sequence: '\I' [enabled by default]
+_ceu_cpp_inputfile.ceu.in:1:9: warning: unknown escape sequence: '\D' [enabled by default]
+_ceu_cpp_inputfile.ceu.in:1:9: warning: unknown escape sequence: '\c' [enabled by default]
+_ceu_cpp_inputfile.ceu.in:1:9: warning: unknown escape sequence: '\h' [enabled by default]
