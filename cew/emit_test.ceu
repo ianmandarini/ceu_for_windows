@@ -1,0 +1,13 @@
+event float test;
+
+par do
+    var float x;
+    loop do
+    	x = await test;
+    	_printf("%f\n",x);
+    end
+with
+    every 1s do
+    	emit test => 0.5;
+    end
+end
