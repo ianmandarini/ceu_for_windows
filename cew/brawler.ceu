@@ -48,7 +48,6 @@ end
 
 //============================================================
 
-/*
 interface Position with
     var float pos_x;
     var float pos_y;
@@ -63,25 +62,40 @@ interface Acceleration with
     var float acc_x;
     var float acc_y;
 end
-*/
+
 
 //============================================================
 
+
 interface Body with
-/*
+    /*
     interface Position;
     interface Speed;
     interface Acceleration;
-*/
+    */
+    
     var float pos_x;
     var float pos_y;
     var float spd_x;
     var float spd_y;
     var float acc_x;
     var float acc_y;
+    
 end
 
+
 //============================================================
+
+/*
+class Platform with
+    interface Position;
+    var _SDL_Renderer[] ren;
+    var w;
+    var h;
+do
+
+end
+*/
 
 class Hero with
     interface Body;
@@ -92,8 +106,8 @@ do
     var _SDL_Texture[] tex = _HERO_TEXTURE;
     this.rect.x = pos_x * RES_X;
     this.rect.y = pos_y * RES_Y;
-    this.rect.w = 50;
-    this.rect.h = 50;
+    this.rect.w = 0.15 * RES_X;
+    this.rect.h = 0.2 * RES_Y;
     this.spd_x = 0;
     this.spd_y = 0;
     this.acc_x = 0;

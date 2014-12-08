@@ -133,3 +133,8 @@ Altered line in file ceu\ceu and ceu-sdl\ceu from
     cpp_exe   = 'cpp',
     to
     cpp_exe   = '..\\mingw\\bin\\cpp',
+
+COPIED mingw\bin\libstdc++-6 (MSVCRT.dll) to lua5.1\bin and to main gcc folder
+
+****
+	user --cpp-exe and --cpp-args "-I ceu-sdl"
