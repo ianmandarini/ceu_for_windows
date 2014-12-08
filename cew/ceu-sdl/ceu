@@ -285,7 +285,9 @@ fprintf(stderr, "TRK: o.%p / l.%d\n", _ceu_go->org, _ceu_go->lbl);
     return RET_HALT;    /* TODO: should never be reached anyways */
 }
 
-static void ceu_app_init (tceu_app* app)
+static __attribute__((noinline))  __attribute__((noclone))
+void
+ceu_app_init (tceu_app* app)
 {
     app->seqno = 0;
 #if defined(CEU_RET) || defined(CEU_OS)
@@ -364,7 +366,7 @@ static void ceu_app_init (tceu_app* app)
  */
 
 #ifdef CEU_OS
-__attribute__ ((section (".export")))
+//__attribute__ ((section (".export")))
 void CEU_EXPORT (uint* size, tceu_init** init) {
     *size = sizeof(CEU_Main);
     *init = (tceu_init*) &ceu_app_init;
@@ -863,8 +865,8 @@ typedef struct {
 typedef void(*tceu_isr_f)(tceu_app* app, tceu_org* org);
 #endif
 
-void ceu_init      (void);
-int  ceu_scheduler (s32(*dt)());
+void ceu_os_init      (void);
+int  ceu_os_scheduler (int(*dt)());
 tceu_queue* ceu_sys_queue_nxt (void);
 void        ceu_sys_queue_rem (void);
 
@@ -941,7 +943,7 @@ void* CEU_APP_ADDR = NULL;
 #include <assert.h>
 #endif
 
-#if defined(CEU_OS) || defined(CEU_DEBUG)
+#if defined(CEU_DEBUG) || defined(CEU_NEWS) || defined(CEU_THREADS) || defined(CEU_OS)
 #include <stdlib.h>     /* malloc/free, exit */
 #endif
 
@@ -1229,7 +1231,7 @@ int ceu_sys_clear (tceu_go* go, int start, void* stop) {
 #endif
 
 /* TODO: ifndef CEU_OS? */
-u8 CEU_GC = 0;  /* execute __ceu_gc() when "true" */
+u8 CEU_GC = 0;  /* execute __ceu_os_gc() when "true" */
 
 void ceu_sys_go (tceu_app* app, int evt, tceu_evtp evtp)
 {
@@ -1658,12 +1660,12 @@ void* CEU_SYS_VEC[CEU_SYS_MAX] __attribute__((used)) = {
  * - i: next position to enqueue
  */
 #if CEU_QUEUE_MAX == 256
-    byte QUEUE[CEU_QUEUE_MAX];
+    byte QUEUE[CEU_QUEUE_MAX] = {0};    /* {0} avoids .bss */
     int  QUEUE_tot = 0;
     u8   QUEUE_get = 0;
     u8   QUEUE_put = 0;
 #else
-    byte QUEUE[CEU_QUEUE_MAX];
+    byte QUEUE[CEU_QUEUE_MAX] = {0};    /* {0} avoids .bss */
     int  QUEUE_tot = 0;
     u16  QUEUE_get = 0;
     u16  QUEUE_put = 0;
@@ -1789,7 +1791,7 @@ static void _ceu_sys_unlink (tceu_lnk* lnk) {
     ceu_sys_free(lnk);
 }
 
-static void __ceu_gc (void)
+static void __ceu_os_gc (void)
 {
     if (! CEU_GC) return;
     CEU_GC = 0;
@@ -1877,7 +1879,7 @@ int ceu_sys_isr (int n, tceu_isr_f f, tceu_app* app) {
 }
 #endif
 
-void ceu_init (void) {
+void ceu_os_init (void) {
 #ifdef CEU_ISR
     int i;
     for (i=0; i<CEU_ISR_MAX; i++) {
@@ -1887,13 +1889,13 @@ void ceu_init (void) {
 #endif
 }
 
-int ceu_scheduler (int(*dt)())
+int ceu_os_scheduler (int(*dt)())
 {
     /*
      * Intercalate DT->WCLOCK->ASYNC->QUEUE->...
      * QUEUE last to separate app->init() from OS_START.
      * QUEUE handles one event at a time to intercalate with WCLOCK.
-     * __ceu_gc() only if QUEUE is emtpy: has to keep data from events 
+     * __ceu_os_gc() only if QUEUE is emtpy: has to keep data from events 
      * accessible.
      */
 
@@ -1982,7 +1984,7 @@ int ceu_scheduler (int(*dt)())
             }
             else
             {
-                __ceu_gc();     /* only when queue is empty */
+                __ceu_os_gc();     /* only when queue is empty */
             }
         }
     }
@@ -2008,12 +2010,14 @@ tceu_app* ceu_sys_load (void* addr)
 #endif
 
     tceu_app* app = (tceu_app*) ceu_sys_malloc(sizeof(tceu_app));
-    if (app == NULL)
+    if (app == NULL) {
         return NULL;
+    }
 
     app->data = (tceu_org*) ceu_sys_malloc(size);
-    if (app->data == NULL)
+    if (app->data == NULL) {
         return NULL;
+    }
 
     app->sys_vec = CEU_SYS_VEC;
     app->nxt = NULL;
@@ -2062,6 +2066,19 @@ printf("<<< %d %d\n", app->isAlive, app->ret);
 */
 
     app->init(app);
+
+/*
+#define GPFSEL1 ((uint*)0x20200004)
+#define GPSET0  ((uint*)0x2020001C)
+#define GPCLR0  ((uint*)0x20200028)
+uint ra;
+ra = *GPFSEL1;
+ra = ra & ~(7<<18);
+ra = ra | 1<<18;
+*GPFSEL1 = ra;
+*GPCLR0 = 1<<16;   // GPIO16 on
+// *GPSET0 = 1<<16;   // GPIO16 off
+*/
 
     /* OS_START */
 
@@ -3883,10 +3900,12 @@ F = {
         -- event void _ok;
         -- The idx must be constant as the runtime uses it blindly.
         -- (generated in env.ceu)
-        table.insert(me.blk_ifc[1][1], 1,
-            node('Dcl_int', me.ln, 'event',
-                node('Type', me.ln, 'void', 0, false, false),
-                '_ok'))
+        --if not is_ifc then
+            table.insert(me.blk_ifc[1][1], 1,
+                node('Dcl_int', me.ln, 'event',
+                    node('Type', me.ln, 'void', 0, false, false),
+                    '_ok'))
+        --end
 
         -- insert class pool for orphan spawn
         if me.__ast_has_malloc then
@@ -5146,7 +5165,8 @@ for _, cls in ipairs(TOPS) do
     if cls.tag=='Dcl_cls' and cls[2]~='Main' then   -- "Main" has no Dcl_imp's
         local dcls1 = cls.blk_ifc[1][1]
         assert(dcls1.tag == 'BlockI')
-        for i=1, #dcls1 do
+        local i = 1
+        while i <= #dcls1 do
             local imp = dcls1[i]
             if imp.tag == '_Dcl_imp' then
                 -- interface A,B,...
@@ -5167,6 +5187,7 @@ for _, cls in ipairs(TOPS) do
                 i = i - 1                    -- repeat
             else
             end
+            i = i + 1
         end
     end
 end
@@ -6212,6 +6233,9 @@ F = {
         local tp, exp = unpack(me)
         me.tp   = tp
         me.lval = exp.lval
+        if tp.ptr > 0 then
+            me.lval = true      -- *((u32*)0x100)=v
+        end
     end,
 
     Nat = function (me)
@@ -8048,7 +8072,11 @@ F = {
 
     SetExp = function (me)
         local _,_,to = unpack(me)
-        CHG(to.lst.acc, 'wr')
+        if to.lst.acc then
+            CHG(to.lst.acc, 'wr')
+        else
+            -- *((u32*)0x100) = v  (no acc)
+        end
     end,
     AwaitInt = function (me)
         CHG(me[1].lst.acc, 'aw')
@@ -10060,9 +10088,10 @@ static void _ceu_constr_]]..me.n..[[ (tceu_app* _ceu_app, tceu_org* __ceu_org, t
                     '#define ceu_in_call_'..id..' '..me.id..'\n'
 
                 local ps = {}
-                if #ins > 1 then
+                local tup = ins.tup
+                if tup and #tup > 1 then
                     for i, _ in ipairs(ins) do
-                        ps[#ps+1] = ', (('..ins.tp..'*)param.ptr)->_'..i
+                        ps[#ps+1] = ', (('..TP.toc(ins)..'*)param.ptr)->_'..i
                     end
                 elseif #ins == 1 then
                     local _,tp,_ = unpack(ins[1])
@@ -11081,9 +11110,11 @@ if (*]]..me.thread.thread_st..[[ < 3) {     /* 3=end */
     Lua = function (me)
         local nargs = #me.params
         local nrets = (me.ret and 1) or 0
+        local lua = string.format('%q', me.lua)
+        lua = string.gsub(lua, '\n', 'n') -- undo format for \n
         LINE(me, [[
 {
-    int err = luaL_loadstring(_ceu_app->lua, ]]..string.format('%q',me.lua)..[[);
+    int err = luaL_loadstring(_ceu_app->lua, ]]..lua..[[);
     if (! err) {
 ]])
 
@@ -11092,7 +11123,7 @@ if (*]]..me.thread.thread_st..[[ < 3) {     /* 3=end */
                 LINE(me, [[
         lua_pushnumber(_ceu_app->lua,]]..V(p)..[[);
 ]])
-            elseif p.tp.id=='char' and p.tp.ptr==1 then
+            elseif TP.toc(p.tp)=='char*' then
                 LINE(me, [[
         lua_pushstring(_ceu_app->lua,]]..V(p)..[[);
 ]])
@@ -11119,13 +11150,21 @@ if (*]]..me.thread.thread_st..[[ < 3) {     /* 3=end */
             ]]..V(me.ret)..[[ = ret;
             lua_pop(_ceu_app->lua, 1);
 ]])
-            elseif me.ret.tp.id=='char' and me.ret.tp.arr then
-                ASR(me.ret.var and me.ret.var.tp.arr, me,
-                    'invalid attribution (requires a buffer)')
+            elseif TP.toc(me.ret.tp) == 'char*' then
+                --ASR(me.ret.var and me.ret.var.tp.arr, me,
+                    --'invalid attribution (requires a buffer)')
                 LINE(me, [[
             if (lua_isstring(_ceu_app->lua,-1)) {
                 const char* ret = lua_tostring(_ceu_app->lua,-1);
-                strncpy(]]..V(me.ret)..[[, ret, ]]..me.ret.var.tp.arr.sval..[[);
+]])
+                local sval = me.ret.var and me.ret.var.tp.arr and me.ret.var.tp.arr.sval
+                if sval then
+                    LINE(me, 'strncpy('..V(me.ret)..', ret, '..(sval-1)..');')
+                    LINE(me, V(me.ret)..'['..(sval-1).."] = '\\0';")
+                else
+                    LINE(me, 'strcpy('..V(me.ret)..', ret);')
+                end
+                LINE(me, [[
             } else {
                 err = 1;
             }
@@ -11445,12 +11484,11 @@ do
                              FILES.ceu_types_h)
         CC = SUB(CC, '#include "ceu_os.h"',
                              FILES.ceu_os_h..'\n'..FILES.ceu_os_c)
-    end
 
-    -- TODO: move above (if not OPTS.os) when pool* becomes sys_calls
-    FILES.ceu_pool_c = SUB(FILES.ceu_pool_c, '#include "ceu_pool.h"', '')
-    CC = SUB(CC, '#include "ceu_pool.h"',
-                         FILES.ceu_pool_h..'\n'..FILES.ceu_pool_c)
+        FILES.ceu_pool_c = SUB(FILES.ceu_pool_c, '#include "ceu_pool.h"', '')
+        CC = SUB(CC, '#include "ceu_pool.h"',
+                             FILES.ceu_pool_h..'\n'..FILES.ceu_pool_c)
+    end
 
     if OPTS.out_s ~= 'CEU_SIZE' then
         CC = SUB(CC, 'CEU_SIZE', OPTS.out_s)
