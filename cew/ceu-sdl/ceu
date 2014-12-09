@@ -366,7 +366,7 @@ ceu_app_init (tceu_app* app)
  */
 
 #ifdef CEU_OS
-//__attribute__ ((section (".export")))
+__attribute__ ((section (".export")))
 void CEU_EXPORT (uint* size, tceu_init** init) {
     *size = sizeof(CEU_Main);
     *init = (tceu_init*) &ceu_app_init;
@@ -604,6 +604,7 @@ typedef union tceu_trl {
 
 typedef union tceu_evtp {
     int   v;
+    float f;
     void* ptr;
     s32   dt;
 #ifdef CEU_THREADS
@@ -611,8 +612,9 @@ typedef union tceu_evtp {
 #endif
 #ifdef __cplusplus
     tceu_evtp () {}
-    tceu_evtp (void* vv) : ptr(vv) {}
-    tceu_evtp (s32   vv) : dt(vv)  {}
+    tceu_evtp (float vv) : float(vv) {}
+    tceu_evtp (void* vv) : ptr(vv)   {}
+    tceu_evtp (s32   vv) : dt(vv)    {}
     /*tceu_evtp (int   vv) : v(vv)   {}*/
 #endif
 } tceu_evtp;
@@ -2574,6 +2576,11 @@ function TP.tostr (tp)
         ret = ret .. '&'
     end
     return ret
+end
+
+function TP.isFloat (tp)
+    return (tp.id=='float' or tp.id=='f32' or tp.id=='f64')
+            and tp.ptr==0 and (not tp.arr)
 end
 
 function TP.isNumeric (tp)
@@ -5693,7 +5700,7 @@ F = {
             return
         end
 
-        ASR(ins.tup or ins.id=='void' or ins.id=='int' or ins.ptr>0,
+        ASR(ins.tup or ins.id=='void' or ins.id=='int' or ins.id=='float' or ins.ptr>0,
             me, 'invalid event type')
         ASR((not ins.arr) and (not ins.ref),
             me, 'invalid event type')
@@ -8091,7 +8098,7 @@ F = {
     end,
     ['Op1_*'] = function (me)
         if not me.lst.acc then
-            assert(me.lst.const)
+            assert(me.lst.sval)
             return  -- constants
         end
 
@@ -9565,6 +9572,8 @@ F =
                 assert(mode == 'val')
                 if isPtr then
                     t2[#t2+1] = 'CEU_EVTP('..val..')'
+                elseif TP.isFloat(ext.evt.ins) then
+                    t2[#t2+1] = 'CEU_EVTP((float)'..val..')'
                 else
                     t2[#t2+1] = 'CEU_EVTP((int)'..val..')'
                 end
@@ -9619,6 +9628,8 @@ F =
                     -- byRef from awake SetExp removes the `*´
         elseif tp.tup then
             me.val = '(('..TP.toc(me.tp)..'*)_ceu_go->evtp.ptr)'
+        elseif TP.isFloat(tp) then
+            me.val = '(_ceu_go->evtp.f)'
         else
             me.val = '(_ceu_go->evtp.v)'
             --me.val = '*(('..TP.toc(e1.evt.ins)..'*)_ceu_go->evtp.ptr)'
@@ -10768,7 +10779,14 @@ _ceu_go->evto = (tceu_org*) ]]..((int.org and int.org.val) or '_ceu_go->org')..[
 #endif
 ]])
         if exp then
-            local field = exp.tp.ptr>0 and 'ptr' or 'v'
+            local field
+            if exp.tp.ptr>0 then
+                field = 'ptr'
+            elseif TP.isFloat(exp.tp) then
+                field = 'f'
+            else
+                field = 'v'
+            end
             LINE(me, [[
 _ceu_go->evtp.]]..field..' = '..V(exp)..[[;
 ]])
