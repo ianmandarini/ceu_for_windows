@@ -1,0 +1,66 @@
+native do
+	/*** c code ***/
+	#include "SDL2/SDL_net.h"
+	/*** c code ***/
+end
+ 
+native do
+    /*** c code ***/
+	UDPsocket sd;
+	IPaddress srvadd;
+	UDPpacket *p;
+	int quit;
+end
+ 
+if _SDLNet_Init() < 0 then
+	_fprintf(_stderr, "SDLNet_Init: %s\n", _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+finalize
+		_sd = _SDLNet_UDP_Open(0);
+with
+end
+
+if _sd == 0 then
+	_fprintf(_stderr, "SDLNet_UDP_Open: %s\n", _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+if _SDLNet_ResolveHost(&_srvadd, "127.0.0.1", 2000) == -1 then
+	_fprintf(_stderr, "SDLNet_ResolveHost(%s %d): %s\n", "127.0.0.1", 2000, _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+finalize
+		_p = _SDLNet_AllocPacket(512);
+with
+end
+if _p == 0 then
+	_fprintf(_stderr, "SDLNet_AllocPacket: %s\n", _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+_quit = 0;
+loop do
+	if _quit != 0 then
+		break;
+	end
+	_printf("Fill the buffer\n>");
+	_scanf("%s", (char*) _p:data);
+
+	_p:address.host = _srvadd.host;
+	_p:address.port = _srvadd.port;
+
+	_p:len = _strlen((char *)_p:data) + 1;
+	_SDLNet_UDP_Send(_sd, -1, _p);
+
+	if _strcmp((char *)_p:data, "quit") == 0 then
+		_quit = 1;
+	end
+end
+
+_SDLNet_FreePacket(_p);
+_SDLNet_Quit();
+
+escape _EXIT_SUCCESS;

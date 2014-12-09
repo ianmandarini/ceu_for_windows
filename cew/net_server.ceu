@@ -1,0 +1,63 @@
+native do
+	#include "SDL2/SDL_net.h"
+end
+ 
+native do
+	UDPsocket sd;       /* Socket descriptor */
+	UDPpacket *p;       /* Pointer to packet memory */
+	int quit;
+end
+ 
+/* Initialize SDL_net */
+if _SDLNet_Init() < 0 then
+	_fprintf(_stderr, "_SDLNet_Init: %s\n", _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+/* Open a socket */
+finalize
+	_sd = _SDLNet_UDP_Open(2000);
+with
+end
+if _sd == 0 then
+	_fprintf(_stderr, "SDLNet_UDP_Open: %s\n", _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+/* Make space for the packet */
+finalize
+	_p = _SDLNet_AllocPacket(999999);
+with
+end
+if _p == 0 then
+	_fprintf(_stderr, "SDLNet_AllocPacket: %s\n", _SDLNet_GetError());
+	_exit(_EXIT_FAILURE);
+end
+
+/* Main loop */
+_quit = 0;
+loop do
+	if _quit != 0 then
+		break;
+	end
+	/* Wait a packet. UDP_Recv returns != 0 if a packet is coming */
+	if _SDLNet_UDP_Recv(_sd, _p) then
+		_printf("UDP Packet incoming\n");
+		_printf("\tChan:    %d\n", _p:channel);
+		_printf("\tData:    %s\n", (char *)_p:data);
+		_printf("\tLen:     %d\n", _p:len);
+		_printf("\tMaxlen:  %d\n", _p:maxlen);
+		_printf("\tStatus:  %d\n", _p:status);
+		_printf("\tAddress: %x %x\n", _p:address.host, _p:address.port);
+
+		/* Quit if packet contains "_quit" */
+		if _strcmp((char *)_p:data, "_quit") == 0 then
+			_quit = 1;
+		end
+	end		
+end
+
+/* Clean and _exit */
+_SDLNet_FreePacket(_p);
+_SDLNet_Quit();
+escape _EXIT_SUCCESS;

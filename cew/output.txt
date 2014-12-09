@@ -1,0 +1,13 @@
+        1 file(s) copied.
+
+****************************
+copy /Y "net_client.ceu" ceu-sdl
+
+****************************
+start "" /D"C:\Users\Ian Albuquerque\Desktop\ceu_for_windows\cew\ceu-sdl" /B /W lua5.1\bin\lua.exe ceu --cpp-exe ..\mingw\bin\cpp "net_client.ceu"
+
+****************************
+mingw\bin\gcc -m32 ceu-sdl\main.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_mixer -lSDL2_image -lSDL2_net
+
+****************************
+del  "ceu-sdl\net_client.ceu"

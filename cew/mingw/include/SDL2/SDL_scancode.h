@@ -100,7 +100,7 @@ typedef enum
     SDL_SCANCODE_LEFTBRACKET = 47,
     SDL_SCANCODE_RIGHTBRACKET = 48,
     SDL_SCANCODE_BACKSLASH = 49, /**< Located at the lower left of the return
-                                  *   key on ISO keyboards and at the right end
+                                  *   key on ISO keyboards and at the right
                                   *   of the QWERTY row on ANSI keyboards.
                                   *   Produces REVERSE SOLIDUS (backslash) and
                                   *   VERTICAL LINE in a US layout, REVERSE

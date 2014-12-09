@@ -136,5 +136,10 @@ Altered line in file ceu\ceu and ceu-sdl\ceu from
 
 COPIED mingw\bin\libstdc++-6 (MSVCRT.dll) to lua5.1\bin and to main gcc folder
 
+INSTALLED SDL_net
+
+Changed SDL_scancode.h (took out 'end')
+Changed SDL_net.h  (too out includes)
+
 ****
 	user --cpp-exe and --cpp-args "-I ceu-sdl"
