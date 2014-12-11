@@ -1,0 +1,85 @@
+can_use_skills = false;
+charmander.r = 0xFF;
+charmander.g = 0x65;
+charmander.b = 0x10;
+emit charmander.change_color;
+emit charmander.disable_movement;
+emit charmander.disable_jump;
+
+var float angle;
+var _SDL_KeyboardEvent[] key2;
+key2 = await SDL_KEYDOWN;
+if key2:keysym.sym == _SDLK_RIGHT then
+    angle = PI / 2.0;
+else/if key2:keysym.sym == _SDLK_LEFT then
+    angle = 3 * PI / 2.0;
+else/if key2:keysym.sym == _SDLK_UP then
+    angle = PI;
+else/if key2:keysym.sym == _SDLK_DOWN then
+    angle = 0.0;
+else
+    angle = 0.0;
+end
+
+var int move_fire = 0;
+par/or do
+    var int i = 0;
+    loop do
+        await 10ms;
+        spawn FlameThrowerParticle in attacks with
+            this.ren = ren;
+            this.w  = 0.03;
+            this.h  = this.w * RES_X / RES_Y;
+            this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
+            this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
+            this.angle = angle;
+            this.range_factor = 1.0 - (10 * i) / 7000.0;
+        end;
+        i = i + 1;
+    end
+with
+    await 5s;
+with
+    var int dt_ms;
+    var float dt_s;
+    every dt_ms in SDL_DT do
+        dt_s = dt_ms/1000.0;
+
+        angle = angle + move_fire * PI * dt_s;
+    end 
+with
+    var _SDL_KeyboardEvent[] key3;
+    every key3 in SDL_KEYDOWN do
+        if key3:keysym.sym == _SDLK_RIGHT then
+            move_fire = 1;
+        else/if key3:keysym.sym == _SDLK_LEFT then
+            move_fire = -1;
+        else/if key3:keysym.sym == _SDLK_UP then
+            move_fire = 1;
+        else/if key3:keysym.sym == _SDLK_DOWN then
+            move_fire = -1;
+        else
+            break;
+        end
+    end
+with
+    var _SDL_KeyboardEvent[] key3;
+    every key3 in SDL_KEYUP do
+        if key3:keysym.sym == _SDLK_RIGHT or key3:keysym.sym == _SDLK_LEFT or key3:keysym.sym == _SDLK_UP or key3:keysym.sym == _SDLK_DOWN then
+            move_fire = 0;
+        end
+    end
+end
+
+par/and do
+    await 1s;
+    charmander.r = 0xFF;
+    charmander.g = 0xFF;
+    charmander.b = 0xFF;
+    emit charmander.enable_jump;
+    emit charmander.enable_movement;
+    emit charmander.change_color;
+    can_use_skills = true;
+with
+    await 2s;
+end

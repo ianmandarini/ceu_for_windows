@@ -1,0 +1,57 @@
+can_use_skills = false;
+charmander.r = 0xD8;
+charmander.g = 0x95;
+charmander.b = 0x10;
+emit charmander.change_color;
+emit charmander.disable_movement;
+emit charmander.disable_jump;
+var _SDL_KeyboardEvent[] key2;
+key2 = await SDL_KEYDOWN;
+if key2:keysym.sym == _SDLK_RIGHT then
+    spawn FireBall in attacks with
+        this.ren = ren;
+        this.w  = 0.05;
+        this.h  = this.w * RES_X / RES_Y;
+        this.pos_x = charmander.pos_x + charmander.w;
+        this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
+        this.horizontal = 1;
+        this.vertical = 0;
+    end;
+else/if key2:keysym.sym == _SDLK_LEFT then
+    spawn FireBall in attacks with
+        this.ren = ren;
+        this.w  = 0.05;
+        this.h  = this.w * RES_X / RES_Y;
+        this.pos_x = charmander.pos_x - this.w;
+        this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
+        this.horizontal = -1;
+        this.vertical = 0;
+    end;
+else/if key2:keysym.sym == _SDLK_UP then
+    spawn FireBall in attacks with
+        this.ren = ren;
+        this.w  = 0.05;
+        this.h  = this.w * RES_X / RES_Y;
+        this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
+        this.pos_y = charmander.pos_y - this.h;
+        this.horizontal = 0;
+        this.vertical = -1;
+    end;
+else/if key2:keysym.sym == _SDLK_DOWN then
+    spawn FireBall in attacks with
+        this.ren = ren;
+        this.w  = 0.05;
+        this.h  = this.w * RES_X / RES_Y;
+        this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
+        this.pos_y = charmander.pos_y + charmander.h;
+        this.horizontal = 0;
+        this.vertical = 1;
+    end;
+end
+charmander.r = 0xFF;
+charmander.g = 0xFF;
+charmander.b = 0xFF;
+emit charmander.enable_jump;
+emit charmander.enable_movement;
+emit charmander.change_color;
+can_use_skills = true;

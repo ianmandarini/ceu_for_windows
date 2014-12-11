@@ -16,7 +16,7 @@ end
 
 /* Open a socket */
 finalize
-	_sd = _SDLNet_UDP_Open(2000);
+	_sd = _SDLNet_UDP_Open(3333);
 with
 end
 if _sd == 0 then

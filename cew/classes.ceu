@@ -1,0 +1,29 @@
+//============================================================
+
+interface Position with
+    var float pos_x;
+    var float pos_y;
+end
+
+interface Speed with
+    var float spd_x;
+    var float spd_y;
+end
+
+interface Acceleration with
+    var float acc_x;
+    var float acc_y;
+end
+
+//============================================================
+
+interface Body with
+    interface Position;
+    interface Speed;
+    interface Acceleration; 
+end
+
+interface SquareDimensions with
+    var float w;
+    var float h;
+end

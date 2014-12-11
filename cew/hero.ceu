@@ -1,0 +1,174 @@
+class Hero with
+    var _SDL_Renderer[] ren;
+
+    interface Body;
+    interface SquareDimensions;
+    event float go_collide;
+    event void change_color;
+    event void die;
+    event void enable_jump;
+    event void disable_jump;
+    event void enable_movement;
+    event void disable_movement;
+
+    var int r = 0x00;
+    var int g = 0x00;
+    var int b = 0x00;
+
+do
+    var float hp_w = 0.5;
+    var float hp_h = 0.05;
+    var float hp_pos_x = 0.05;
+    var float hp_pos_y = 0.05;
+    var _SDL_Rect hp_rect;
+    var int hp_r = 0x33;
+    var int hp_g = 0xFF;
+    var int hp_b = 0x77;
+
+    var bool walk_l = false;
+    var bool walk_r = false;
+    var _SDL_Rect rect;
+    var _SDL_Texture[] tex = _HERO_TEXTURE;
+
+    var float hp = 1.0;
+
+    this.spd_x = 0;
+    this.spd_y = 0;
+    this.acc_x = 0;
+    this.acc_y = 0;
+
+    var int jumps_max = 2;
+    var int jumps_ready = jumps_max;
+
+    par do
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            this.pos_x = this.pos_x + this.spd_x * dt_s;
+            this.pos_y = this.pos_y + this.spd_y * dt_s;
+
+            this.spd_x = this.spd_x + this.acc_x * dt_s;
+            this.spd_y = this.spd_y + this.acc_y * dt_s;
+        end
+    with
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            this.spd_y = this.spd_y + GRAVITY * dt_s;
+        end
+    with
+        var float plat_y;
+        loop do
+            plat_y = await go_collide;
+            this.spd_y = 0;
+            this.pos_y = plat_y - this.h;
+            jumps_ready = jumps_max;
+        end
+    with
+        loop do
+            await die;
+            this.pos_x = 0.5;
+            this.pos_y = 0.0;
+            this.spd_x = 0;
+            this.spd_y = 0;
+            this.acc_x = 0;
+            this.acc_y = 0;
+            jumps_ready = 0;
+            hp = hp - 0.3;
+        end
+    with
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            if walk_l == true then
+                this.pos_x = this.pos_x + (-0.4) * dt_s;
+            end
+            if walk_r == true then
+                this.pos_x = this.pos_x + (0.4) * dt_s;
+            end
+        end
+    with
+        loop do
+            par/or do
+                par do
+                    var _SDL_KeyboardEvent[] key;
+                    every key in SDL_KEYDOWN do
+                        if key:keysym.sym == _SDLK_LEFT then
+                            walk_l = true;
+                        else/if key:keysym.sym == _SDLK_RIGHT then
+                            walk_r = true;
+                        end
+                    end
+                with
+                    var _SDL_KeyboardEvent[] key;
+                    every key in SDL_KEYUP do
+                        if key:keysym.sym == _SDLK_LEFT then
+                            walk_l = false;
+                        else/if key:keysym.sym == _SDLK_RIGHT then
+                            walk_r = false;
+                        end
+                    end
+                end
+            with
+                await disable_movement;
+                walk_l = false;
+                walk_r = false;
+            end
+            await enable_movement;
+        end 
+    with
+        loop do
+            par/or do
+                var _SDL_KeyboardEvent[] key;
+                loop do
+                    key = await SDL_KEYDOWN;
+                    if key:keysym.sym == _SDLK_UP then
+                        if jumps_ready > 0 then
+                            this.spd_y = -1.5;
+                            jumps_ready = jumps_ready - 1;
+                            //await 200ms;
+                        end
+                    end
+                end
+            with
+                await disable_jump;
+            end
+            await enable_jump;
+        end
+    with
+        loop do
+            await change_color;
+            _SDL_SetTextureColorMod(_HERO_TEXTURE, r, g, b);
+        end 
+    with
+        every SDL_REDRAW do
+            this.rect.x = pos_x * RES_X;
+            this.rect.y = pos_y * RES_Y;
+            this.rect.w = w * RES_X;
+            this.rect.h = h * RES_Y;
+            _SDL_RenderCopy(ren, tex, null, &rect);
+        end
+    with
+        every SDL_REDRAW do
+            this.hp_rect.x = hp_pos_x * RES_X;
+            this.hp_rect.y = hp_pos_y * RES_Y;
+            this.hp_rect.w = hp_w * hp * RES_X;
+            this.hp_rect.h = hp_h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, hp_r, hp_g, hp_b, 0xFF);
+            _SDL_RenderFillRect(ren, &hp_rect);
+
+            this.hp_rect.x = hp_pos_x * RES_X;
+            this.hp_rect.y = hp_pos_y * RES_Y;
+            this.hp_rect.w = hp_w * RES_X;
+            this.hp_rect.h = hp_h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, 0x00,  0x00, 0x00, 0xFF);
+            _SDL_RenderDrawRect(ren, &hp_rect);
+        end
+    end
+end

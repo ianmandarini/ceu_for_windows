@@ -1,0 +1,242 @@
+class FireBall with
+    var _SDL_Renderer[] ren;
+
+    interface Body;
+    interface SquareDimensions;
+    interface Attack;
+
+    var int horizontal;
+    var int vertical;
+do
+    var _SDL_Rect rect;
+    var _SDL_Texture[] tex = _HERO_TEXTURE;
+
+    if horizontal == 1 then
+        this.spd_x = 1.0;
+    else/if horizontal == -1 then
+        this.spd_x = -1.0;
+    else
+        this.spd_x = 0.0;
+    end
+    if vertical == 1 then
+        this.spd_y = 1.0;
+    else/if vertical == -1 then
+        this.spd_y = -1.0;
+    else
+        this.spd_y = 0.0;
+    end
+    this.acc_x = 0;
+    this.acc_y = 0;
+
+    var int r = 0xD8;
+    var int g = 0x95;
+    var int b = 0x10;
+
+    par/or do
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            this.pos_x = this.pos_x + this.spd_x * dt_s;
+            this.pos_y = this.pos_y + this.spd_y * dt_s;
+
+            this.spd_x = this.spd_x + this.acc_x * dt_s;
+            this.spd_y = this.spd_y + this.acc_y * dt_s;
+        end
+    with
+        every SDL_REDRAW do
+            this.rect.x = pos_x * RES_X;
+            this.rect.y = pos_y * RES_Y;
+            this.rect.w = w * RES_X;
+            this.rect.h = h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, r, g, b, 0xFF);
+            _SDL_RenderFillRect(ren, &rect);
+        end
+    with
+        every SDL_DT do
+            if this.pos_x > 2.0 or this.pos_x < -1.0 then
+                break;
+            end
+            if this.pos_y > 2.0 or this.pos_y < -1.0 then
+                break;
+            end
+        end
+    end
+end
+
+class FireNovaParticle with
+    var _SDL_Renderer[] ren;
+
+    interface Body;
+    interface SquareDimensions;
+    interface Attack;
+
+    var float angle;
+do
+    var _SDL_Rect rect;
+    var _SDL_Texture[] tex = _HERO_TEXTURE;
+
+    this.spd_x = 0.3 * _sin(angle);
+    this.spd_y = 0.3 * RES_X/RES_Y * _cos(angle);
+    this.acc_x = - 4.0 * this.spd_x;
+    this.acc_y = - 4.0 * this.spd_y;
+
+    var int r = 0xFF;
+    var int g = 0x65;
+    var int b = 0x10;
+
+    par/or do
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            angle = angle + PI/8.0 * dt_s + PI/2.5 * dt_s * dt_s;
+            this.pos_x = this.pos_x + 0.3 * _sin(angle) * dt_s;
+            this.pos_y = this.pos_y + 0.3 * RES_X/RES_Y * _cos(angle) * dt_s;
+        end
+    with
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            this.pos_x = this.pos_x + this.spd_x * dt_s;
+            this.pos_y = this.pos_y + this.spd_y * dt_s;
+
+            this.spd_x = this.spd_x + this.acc_x * dt_s;
+            this.spd_y = this.spd_y + this.acc_y * dt_s;
+        end
+    with
+        every SDL_REDRAW do
+            this.rect.x = pos_x * RES_X;
+            this.rect.y = pos_y * RES_Y;
+            this.rect.w = w * RES_X;
+            this.rect.h = h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, r, g, b, 0xFF);
+            _SDL_RenderFillRect(ren, &rect);
+        end
+    with
+        every SDL_DT do
+            if this.pos_x > 2.0 or this.pos_x < -1.0 then
+                break;
+            end
+            if this.pos_y > 2.0 or this.pos_y < -1.0 then
+                break;
+            end
+        end
+    end
+end
+
+class FireFloorParticle with
+    var _SDL_Renderer[] ren;
+
+    interface Body;
+    interface SquareDimensions;
+    interface Attack;
+do
+    var _SDL_Rect rect;
+    var _SDL_Texture[] tex = _HERO_TEXTURE;
+
+    this.spd_x = 0.2 * (_rand()%200/100.0 - 1.0);
+    this.spd_y = 0.3 * (_rand()%100/100.0) + 0.5;
+    this.acc_x = 0.0;
+    this.acc_y = 0.0;
+
+    var int r = 0xFF;
+    var int g = 0x20;
+    var int b = 0x10;
+
+    par/or do
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            this.pos_x = this.pos_x + this.spd_x * dt_s;
+            this.pos_y = this.pos_y + this.spd_y * dt_s;
+
+            this.spd_x = this.spd_x + this.acc_x * dt_s;
+            this.spd_y = this.spd_y + this.acc_y * dt_s;
+        end
+    with
+        every SDL_REDRAW do
+            this.rect.x = pos_x * RES_X;
+            this.rect.y = pos_y * RES_Y;
+            this.rect.w = w * RES_X;
+            this.rect.h = h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, r, g, b, 0xFF);
+            _SDL_RenderFillRect(ren, &rect);
+        end
+    with
+        every SDL_DT do
+            if this.pos_x > 2.0 or this.pos_x < -1.0 then
+                break;
+            end
+            if this.pos_y > 2.0 or this.pos_y < -1.0 then
+                break;
+            end
+        end
+    end
+end
+
+class FlameThrowerParticle with
+    var _SDL_Renderer[] ren;
+
+    interface Body;
+    interface SquareDimensions;
+    interface Attack;
+
+    var float angle;
+    var float range_factor;
+do
+    var _SDL_Rect rect;
+    var _SDL_Texture[] tex = _HERO_TEXTURE;
+
+    angle = angle + ((_rand()%200/100.0)-1.0)*PI/8.0;
+
+    this.spd_x = 1.3 * range_factor * _sin(angle);
+    this.spd_y = 1.3 * range_factor * RES_X/RES_Y * _cos(angle);
+    this.acc_x = - 2.0 * this.spd_x;
+    this.acc_y = - 2.0 * this.spd_y;
+
+    var int r = 0xFF;
+    var int g = 0x65;
+    var int b = 0x10;
+
+    par/or do
+        var int dt_ms;
+        var float dt_s;
+        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
+
+            this.pos_x = this.pos_x + this.spd_x * dt_s;
+            this.pos_y = this.pos_y + this.spd_y * dt_s;
+
+            this.spd_x = this.spd_x + this.acc_x * dt_s;
+            this.spd_y = this.spd_y + this.acc_y * dt_s;
+        end
+    with
+        every SDL_REDRAW do
+            this.rect.x = pos_x * RES_X;
+            this.rect.y = pos_y * RES_Y;
+            this.rect.w = w * RES_X;
+            this.rect.h = h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, r, g, b, 0xFF);
+            _SDL_RenderFillRect(ren, &rect);
+        end
+    with
+        every SDL_DT do
+            if this.pos_x > 2.0 or this.pos_x < -1.0 then
+                break;
+            end
+            if this.pos_y > 2.0 or this.pos_y < -1.0 then
+                break;
+            end
+            if _sqrt(this.spd_x*this.spd_x + this.spd_y*this.spd_y) <= FLOAT_ERR then
+                break;
+            end
+        end
+    end
+end

@@ -1,0 +1,35 @@
+class Platform with
+    var _SDL_Renderer[] ren;
+
+    interface Position;
+    interface SquareDimensions;
+
+    event void go_collide;
+    event void un_collide;
+do
+    var _SDL_Rect rect;
+    var int r = 0x00;
+    var int g = 0x00;
+    var int b = 0x00;
+
+    par do
+        loop do
+            await go_collide;
+            b = 0xFF;
+        end 
+    with
+        loop do
+            await un_collide;
+            b = 0x00;
+        end 
+    with
+        every SDL_REDRAW do
+            this.rect.x = pos_x * RES_X;
+            this.rect.y = pos_y * RES_Y;
+            this.rect.w = w * RES_X;
+            this.rect.h = h * RES_Y;
+            _SDL_SetRenderDrawColor(ren, r, g, b, 0xFF);
+            _SDL_RenderFillRect(ren, &rect);
+        end
+    end
+end

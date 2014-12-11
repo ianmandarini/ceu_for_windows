@@ -1,0 +1,50 @@
+can_use_skills = false;
+
+loop i in 105 do
+    charmander.r = 255 - i;
+    charmander.g = 255 - i;
+    charmander.b = 255 - i;
+    emit charmander.change_color;
+    await 3ms;
+end
+loop i in 100 do
+    charmander.r = 150;
+    charmander.g = 150 - i;
+    charmander.b = 150 - i;
+    emit charmander.change_color;
+    await 3ms;
+end
+await 1s;
+charmander.r = 0xFF;
+charmander.g = 0x00;
+charmander.b = 0x00;
+emit charmander.change_color;
+par/or do
+    var _SDL_KeyboardEvent[] key2;
+    loop do
+        key2 = await SDL_KEYDOWN;
+        if key2:keysym.sym == _SDLK_r then
+            charmander.spd_y = -0.3;
+            loop i in 10 do
+                spawn FireFloorParticle in attacks with
+                    this.ren = ren;
+                    this.w  = 0.03;
+                    this.h  = this.w * RES_X / RES_Y;
+                    this.pos_x = charmander.pos_x + charmander.w * (_rand()%100/100.0) - this.w / 2.0;
+                    this.pos_y = charmander.pos_y + charmander.h * (_rand()%100/100.0) - this.h / 2.0;
+                end;
+            end
+            await 50ms;
+        end
+    end
+with
+    await 5s;
+end
+
+charmander.r = 0xFF;
+charmander.g = 0xFF;
+charmander.b = 0xFF;
+emit charmander.change_color;
+can_use_skills = true;
+
+await 5s;

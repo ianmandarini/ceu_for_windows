@@ -1,0 +1,37 @@
+can_use_skills = false;
+charmander.r = 0xFF;
+charmander.g = 0x65;
+charmander.b = 0x10;
+emit charmander.change_color;
+emit charmander.disable_movement;
+emit charmander.disable_jump;
+
+var float angle;
+var int amount;
+
+angle = (_rand()%100)/100.0 * 2*PI;
+amount = 10;
+loop i in amount do
+    spawn FireNovaParticle in attacks with
+        this.ren = ren;
+        this.w  = 0.03;
+        this.h  = this.w * RES_X / RES_Y;
+        this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
+        this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
+        this.angle = angle;
+    end;
+
+    angle = angle + 2 * PI / amount;
+end
+par/and do
+    await 1s;
+    charmander.r = 0xFF;
+    charmander.g = 0xFF;
+    charmander.b = 0xFF;
+    emit charmander.enable_jump;
+    emit charmander.enable_movement;
+    emit charmander.change_color;
+    can_use_skills = true;
+with
+    await 2s;
+end

@@ -40,12 +40,17 @@ int main(int argn, char* argc[])
 	strcat(cmd,"start \"\" /D\"");
 	strcat(cmd,current_dir);
 	strcat(cmd,"\\ceu-sdl\" /B /W lua5.1\\bin\\lua.exe ceu --cpp-exe ..\\mingw\\bin\\cpp");
+	strcat(cmd," \"");
+	strcat(cmd,argc[1]);
+	strcat(cmd,"\"");
+	/*
 	for(i=1;i<argn;i++)
 	{
 		strcat(cmd," \"");
 		strcat(cmd,argc[i]);
 		strcat(cmd,"\"");
 	}
+	*/
 	printf("\n****************************\n");
 	printf("%s\n",cmd);
 	system(cmd);

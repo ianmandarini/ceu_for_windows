@@ -27,7 +27,7 @@ if _sd == 0 then
 	_exit(_EXIT_FAILURE);
 end
 
-if _SDLNet_ResolveHost(&_srvadd, "127.0.0.1", 2000) == -1 then
+if _SDLNet_ResolveHost(&_srvadd, "25.122.64.63", 3333) == -1 then
 	_fprintf(_stderr, "SDLNet_ResolveHost(%s %d): %s\n", "127.0.0.1", 2000, _SDLNet_GetError());
 	_exit(_EXIT_FAILURE);
 end
