@@ -1,3 +1,5 @@
+// ceusdlc brawler.ceu interfaces.ceu hero.ceu platform.ceu charmander_attacks.ceu fire_ball.ceu fire_nova.ceu fire_thrower.ceu overheat.ceu
+
 #ifndef ALL
     #include "sdl.ceu"
 
