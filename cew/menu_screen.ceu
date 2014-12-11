@@ -1,0 +1,146 @@
+//============================================================
+
+    native do
+        SDL_Texture* TITLE_TEXTURE;
+        SDL_Texture* SMASH_BALL_TEXTURE;
+        SDL_Texture* CHARMANDER_TEXTURE;
+        SDL_Texture* SQUIRTLE_TEXTURE;
+        SDL_Texture* HERO_TEXTURE;
+    end
+
+    finalize
+        _TITLE_TEXTURE = _IMG_LoadTexture(ren, "title.png");
+    with
+        _SDL_DestroyTexture(_TITLE_TEXTURE);
+    end
+
+    if _TITLE_TEXTURE == null then
+        _printf("SDL_Init failed: %s\n", _SDL_GetError());
+    end
+
+    finalize
+        _SMASH_BALL_TEXTURE = _IMG_LoadTexture(ren, "smash_ball.png");
+    with
+        _SDL_DestroyTexture(_SMASH_BALL_TEXTURE);
+    end
+
+    if _SMASH_BALL_TEXTURE == null then
+        _printf("SDL_Init failed: %s\n", _SDL_GetError());
+    end
+
+    finalize
+        _CHARMANDER_TEXTURE = _IMG_LoadTexture(ren, "charmander.png");
+    with
+        _SDL_DestroyTexture(_CHARMANDER_TEXTURE);
+    end
+
+    if _CHARMANDER_TEXTURE == null then
+        _printf("SDL_Init failed: %s\n", _SDL_GetError());
+    end
+
+    finalize
+        _SQUIRTLE_TEXTURE = _IMG_LoadTexture(ren, "squirtle.png");
+    with
+        _SDL_DestroyTexture(_SQUIRTLE_TEXTURE);
+    end
+
+    if _SQUIRTLE_TEXTURE == null then
+        _printf("SDL_Init failed: %s\n", _SDL_GetError());
+    end
+
+    var _SDL_Texture[] title_tex = _TITLE_TEXTURE;
+    var _SDL_Texture[] smash_ball_tex = _SMASH_BALL_TEXTURE;
+    var _SDL_Texture[] charmander_tex = _CHARMANDER_TEXTURE;
+    var _SDL_Texture[] squirtle_tex = _SQUIRTLE_TEXTURE;
+
+    var _SDL_Rect rect1;
+    var _SDL_Rect rect2;
+
+//============================================================
+
+
+// First screen, just press start for the champion select screen
+par/or do
+    every SDL_REDRAW do
+        _SDL_SetRenderDrawColor(ren, 0x11, 0x11, 0x11, 0);
+        _SDL_RenderFillRect(ren, null);
+    end
+with
+    every SDL_REDRAW do
+        rect.x = (RES_X - 380)/2;
+        rect.y = (RES_Y - 360)/2;
+        rect.w = 360;
+        rect.h = 360;
+        _SDL_RenderCopy(ren, smash_ball_tex, null, &rect);
+    end
+with
+    every SDL_REDRAW do
+        rect.x = (RES_X - 380)/2;
+        rect.y = (RES_Y - 200)/2;
+        rect.w = 380;
+        rect.h = 200;
+        _SDL_RenderCopy(ren, title_tex, null, &rect);
+    end
+with
+    var _SDL_KeyboardEvent[] key;
+    key = await SDL_KEYDOWN;
+    if key:keysym.sym == _SDLK_SPACE then
+    end
+with
+    every SDL_REDRAW do
+        _SDL_RenderPresent(ren);
+    end
+with
+    await SDL_QUIT;
+end
+
+
+//Champion select screen
+par/or do
+    every SDL_REDRAW do
+        _SDL_SetRenderDrawColor(ren, 0x33, 0x33, 0x33, 0);
+        _SDL_RenderFillRect(ren, null);
+    end
+with
+    every SDL_REDRAW do
+        rect.x = (RES_X - 560)/2;
+        rect.y = (RES_Y - 400)/2;
+        rect.w = 560;
+        rect.h = 400;
+        _SDL_SetRenderDrawColor(ren, 0x77, 0x77, 0x77, 0xFF);
+        _SDL_RenderFillRect(ren, &rect);
+    end
+with
+    every SDL_REDRAW do
+        rect1.x = 0.2 * RES_X;
+        rect1.y = 0.2 * RES_Y;
+        rect1.w = 0.2 * RES_X;
+        rect1.h = 0.2 * RES_X;
+        _SDL_RenderCopy(ren, charmander_tex, null, &rect1);
+    end
+with
+    every SDL_REDRAW do
+        rect2.x = (1 - 0.2 - 0.2) * RES_X;
+        rect2.y = 0.2 * RES_Y;
+        rect2.w = 0.2 * RES_X;
+        rect2.h = 0.2 * RES_X;
+        _SDL_RenderCopy(ren, squirtle_tex, null, &rect2);
+    end
+with
+    var _SDL_MouseButtonEvent[] mouse;
+    par/or do
+        mouse = await SDL_MOUSEBUTTONDOWN
+            until _SDL_Rect_vs_Mouse(&rect1, mouse);
+            _HERO_TEXTURE = charmander_tex;
+    with
+        mouse = await SDL_MOUSEBUTTONDOWN
+            until _SDL_Rect_vs_Mouse(&rect2, mouse);
+            _HERO_TEXTURE = squirtle_tex;
+    end
+with
+    every SDL_REDRAW do
+        _SDL_RenderPresent(ren);
+    end
+with
+    await SDL_QUIT;
+end

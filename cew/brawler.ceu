@@ -1,4 +1,4 @@
-// ceusdlc brawler.ceu interfaces.ceu hero.ceu platform.ceu charmander_attacks.ceu fire_ball.ceu fire_nova.ceu fire_thrower.ceu overheat.ceu
+// ceusdlc brawler.ceu interfaces.ceu hero.ceu platform.ceu charmander_attacks.ceu fire_ball.ceu fire_nova.ceu fire_thrower.ceu overheat.ceu menu_screen.ceu
 
 #ifndef ALL
     #include "sdl.ceu"
@@ -29,6 +29,7 @@ end
 
     input _SDL_KeyboardEvent[] SDL_KEYDOWN;
     input _SDL_KeyboardEvent[] SDL_KEYUP;
+    input _SDL_MouseButtonEvent[] SDL_MOUSEBUTTONDOWN;
 
 //============================================================
 
@@ -56,22 +57,11 @@ end
     _SDL_SetWindowTitle(win, WINDOW_TITLE);
 #endif
 
-//============================================================
-
-native do
-    SDL_Texture* HERO_TEXTURE;
-end
-    finalize
-        _HERO_TEXTURE = _IMG_LoadTexture(ren, "charmander.png");
-    with
-        _SDL_DestroyTexture(_HERO_TEXTURE);
-    end
-
-    if _HERO_TEXTURE == null then
-        _printf("SDL_Init failed: %s\n", _SDL_GetError());
-    end
+    var _SDL_Rect rect;
 
 //============================================================
+
+#include "menu_screen.ceu"
 
 par/or do
     every SDL_REDRAW do
