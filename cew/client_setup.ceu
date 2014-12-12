@@ -1,0 +1,57 @@
+native do
+	#include "SDL2/SDL_net.h"
+end
+ 
+native do
+	UDPsocket client_sd;
+	IPaddress client_srvadd;
+	UDPpacket *client_p;
+
+	char other_ip[30] = "25.122.64.63";
+	int port = 3333;
+
+	int quit;
+
+	#define PACKAGE_SIZE 512
+
+	void initializeClient()
+	{
+		if(SDLNet_Init() < 0)
+		{
+			fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+		client_sd = SDLNet_UDP_Open(0);
+		if(client_sd == 0)
+		{
+			fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+		if(SDLNet_ResolveHost(&client_srvadd, other_ip, port) == -1)
+		{
+			fprintf(stderr, "SDLNet_ResolveHost(%s %d): %s\n", other_ip, port, SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+		client_p = SDLNet_AllocPacket(PACKAGE_SIZE);
+		if(client_p == 0)
+		{
+			fprintf(stderr, "SDLNet_AllocPacket: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	void sendMessage(char* message)
+	{
+		strcpy((char *)client_p:data,message);
+		client_p->address.host = client_srvadd.host;
+		client_p->address.port = client_srvadd.port;
+		client_p->len = strlen((char *)client_p->data) + 1;
+		SDLNet_UDP_Send(client_sd, -1, client_p);	
+	}
+
+	void closeClient()
+	{
+		SDLNet_FreePacket(client_p);
+		//_SDLNet_Quit();
+	}
+end

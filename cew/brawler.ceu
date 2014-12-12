@@ -38,6 +38,8 @@ end
 
 //============================================================
 
+#include "network.ceu"
+
 #include "interfaces.ceu"
 #include "platform.ceu"
 #include "hero.ceu"
@@ -59,6 +61,8 @@ end
     with
         _SDL_DestroyRenderer(ren);
     end
+
+    _InitializeNet();
 #else
     _SDL_SetWindowTitle(win, WINDOW_TITLE);
 #endif
@@ -70,8 +74,6 @@ end
 #include "menu_screen.ceu"
 
 #include "server_screen.ceu"
-
-
 
 par/or do
     every SDL_REDRAW do
@@ -121,6 +123,21 @@ with
     end;
 
     par do
+        var char[100] msg;
+        var char[100] num;
+        every SDL_DT do
+            _strcpy((int)msg,"h ");
+            _snprintf((int)num,50,"%f",charmander.pos_x);
+            //_itoa(charmander.pos_x,(int)num,10);
+            _strcat((int)msg,(int)num);
+            _strcat((int)msg," ");
+            _snprintf((int)num,50,"%f",charmander.pos_y);
+            //_itoa(charmander.pos_y,(int)num,10);
+            _strcat((int)msg,(int)num);
+            _printf("%s\n",(int)msg);
+            //_SndMsg("h");
+        end
+    with
         every SDL_DT do
             loop (Platform*)plat in platforms do
                 if charmander.pos_x + charmander.w >= plat:pos_x and 
@@ -215,6 +232,7 @@ with
     end
 with
     await SDL_QUIT;
+    _CloseNet();
 end
 
 escape 0;
