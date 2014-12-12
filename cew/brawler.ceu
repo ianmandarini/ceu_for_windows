@@ -15,6 +15,8 @@ native do
     }
 end
 
+var int opcao;
+
 //============================================================
 
     #define PI 3.14
@@ -148,6 +150,10 @@ with
                     rival.g = r_g;
                     rival.b = r_b;
                     emit rival.change_color;
+                else/if s[0] == 'v' then
+                    var float hp_riv;
+                    _sscanf((int)s,"v %f",(int)&hp_riv);
+                    rival.hp = hp_riv;
                 else/if s[0] == 'a' then
                     var int id;
                     _sscanf((int)s,"a %d",(int)&id);
@@ -237,6 +243,11 @@ with
             _snprintf((int)num,50,"%f",charmander.pos_y);
             //_itoa(charmander.pos_y,(int)num,10);
             _strcat((int)msg,(int)num);
+            _SndMsg((int)msg);
+
+            _strcpy((int)msg," ");
+
+            _snprintf((int)msg,50,"v %f",charmander.hp);
             _SndMsg((int)msg);
         end
     with
