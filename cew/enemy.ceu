@@ -13,6 +13,7 @@ class Enemy with
     var int g = 0x00;
     var int b = 0x00;
 
+    var float hp = 1.0;
 do
     var float hp_w = 0.4;
     var float hp_h = 0.05;
@@ -26,7 +27,6 @@ do
     var _SDL_Rect rect;
     var _SDL_Texture[] tex = _ENEMY_TEXTURE;
 
-    var float hp = 1.0;
 
     par do
         loop do
