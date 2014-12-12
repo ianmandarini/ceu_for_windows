@@ -155,7 +155,7 @@ with
             //_itoa(charmander.pos_y,(int)num,10);
             _strcat((int)msg,(int)num);
             _printf("%s\n",(int)msg);
-            _SndMsg(msg);
+            _SndMsg((int)msg);
         end
     with
         every SDL_DT do
