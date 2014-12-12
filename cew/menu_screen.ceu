@@ -6,6 +6,7 @@
         SDL_Texture* CHARMANDER_TEXTURE;
         SDL_Texture* SQUIRTLE_TEXTURE;
         SDL_Texture* HERO_TEXTURE;
+        SDL_Texture* ENEMY_TEXTURE;
     end
 
     finalize

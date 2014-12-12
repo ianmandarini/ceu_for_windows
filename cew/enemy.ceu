@@ -10,11 +10,14 @@ class Enemy with
     event void disable_jump;
     event void enable_movement;
     event void disable_movement;
-    
+
+    event _Pos* update_position;
+/*    
     event void walk_l;
     event void walk_l_stop;
     event void walk_r;
     event void walk_r_stop;
+*/
 
     var int r = 0x00;
     var int g = 0x00;
@@ -23,7 +26,7 @@ class Enemy with
 do
     var float hp_w = 0.4;
     var float hp_h = 0.05;
-    var float hp_pos_x = 0.95;
+    var float hp_pos_x = 0.95 - hp_w;
     var float hp_pos_y = 0.05;
     var _SDL_Rect hp_rect;
     var int hp_r = 0xFF;
@@ -89,6 +92,16 @@ do
     
         loop do
             par/or do
+
+                var _Pos* actual_position = await update_position;
+
+                this.pos_x = actual_position:x;
+                this.pos_y = actual_position:y;
+
+            with
+                await disable_movement;
+            end
+/*
                 await walk_l;
 
                 par/or do
@@ -113,8 +126,7 @@ do
                         dt_s = dt_ms/1000.0;
                         this.pos_x = this.pos_x + (0.4) * dt_s;
                     end
-                end
-            end
+                end*/
         end
 
 
@@ -192,7 +204,7 @@ do
         end
     with
         every SDL_REDRAW do
-            this.hp_rect.x = hp_pos_x * RES_X;
+            this.hp_rect.x = hp_pos_x * RES_X + (hp_w * (1 - hp) * RES_X);
             this.hp_rect.y = hp_pos_y * RES_Y;
             this.hp_rect.w = hp_w * hp * RES_X;
             this.hp_rect.h = hp_h * RES_Y;

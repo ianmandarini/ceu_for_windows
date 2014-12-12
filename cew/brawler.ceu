@@ -4,6 +4,11 @@
     #include "sdl.ceu"
 
 native do
+    typedef struct pos {
+        float x;
+        float y;
+    } Pos;
+
     float abs_float(float x)
     {
         return x<0?-x:x;
@@ -78,6 +83,14 @@ with
         this.h  = this.w * RES_X / RES_Y;
     end;
 
+    var Enemy rival with
+        this.ren = ren;
+        this.pos_x = 0.4;
+        this.pos_y = 0.5;
+        this.w  = 0.10;
+        this.h  = this.w * RES_X / RES_Y;
+    end;
+
     pool Platform[] platforms;
     pool Attack[] attacks;
 
@@ -123,6 +136,43 @@ with
             end
         end
     with
+        every SDL_DT do
+            loop (Platform*)plat in platforms do
+                if rival.pos_x + rival.w >= plat:pos_x and 
+                    rival.pos_x <= plat:pos_x + plat:w and 
+                    _abs_float(rival.pos_y + rival.h - plat:pos_y) <= FLOAT_ERR and
+                    rival.spd_y > 0 then
+
+                    emit rival.go_collide => plat:pos_y;
+                    emit plat:go_collide;
+                else
+                    emit plat:un_collide;
+                end
+            end
+
+            if rival.pos_y >= 1.0 then
+                emit rival.die;
+            end
+        end
+    with
+        var _SDL_KeyboardEvent[] key1;
+        every key1 in SDL_KEYDOWN do
+            if key1:keysym.sym == _SDLK_j then
+                var _Pos p;
+                p.x = rival.pos_x - 0.02;
+                p.y = rival.pos_y;
+                emit rival.update_position => &p;
+
+            else/if key1:keysym.sym == _SDLK_l then
+                var _Pos p;
+                p.x = rival.pos_x + 0.02;
+                p.y = rival.pos_y;
+                emit rival.update_position => &p;
+            end
+        end
+
+
+    with
         var _SDL_KeyboardEvent[] key;
         var bool can_use_skills = true;
         par do
@@ -155,8 +205,6 @@ with
             end
         end
     end
-with
-    #include "teste_enemy.ceu"
 with
     every SDL_REDRAW do
         _SDL_RenderPresent(ren);
