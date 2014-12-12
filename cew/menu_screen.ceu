@@ -103,6 +103,9 @@ else
     #include "client_screen.ceu"
 end
 
+
+await 1s;
+
 //Champion select screen
 par/or do
     every SDL_REDRAW do
@@ -137,8 +140,6 @@ with
 with
     var _SDL_MouseButtonEvent[] mouse;
 
-    await 1s;
-
     par/or do
         mouse = await SDL_MOUSEBUTTONDOWN
             until _SDL_Rect_vs_Mouse(&rect1, mouse);
@@ -165,9 +166,11 @@ with
                 _sscanf((int)s,"c %d",(int)&enemy_chosen);
                 if enemy_chosen == 1 then
                     _ENEMY_TEXTURE = charmander_tex;
+                    _printf("The enemy has chosen charmander.\n");
                     break;
                 else/if enemy_chosen == 2 then
                     _ENEMY_TEXTURE = squirtle_tex;
+                    _printf("The enemy has chosen squirtle.\n");
                     break;
                 end
             end

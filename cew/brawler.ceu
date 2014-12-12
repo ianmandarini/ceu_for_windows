@@ -188,6 +188,7 @@ with
             end
 
             if s != null then
+                _printf("Received <%s>.\n",(int)s);
                 if s[0] == 'h' then
                     _sscanf((int)s,"h %f %f",(int)&p.x,(int)&p.y);
                     emit rival.update_position => &p;
