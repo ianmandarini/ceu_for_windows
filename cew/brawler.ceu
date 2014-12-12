@@ -69,6 +69,10 @@ end
 
 #include "menu_screen.ceu"
 
+#include "server_screen.ceu"
+
+
+
 par/or do
     every SDL_REDRAW do
         _SDL_SetRenderDrawColor(ren, 0xAA, 0xAA, 0xAA, 0);

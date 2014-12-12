@@ -1,0 +1,139 @@
+#include "sdl.ceu"
+
+native do
+	#include "SDL2/SDL_net.h"
+
+	UDPsocket client_sd;
+	IPaddress client_srvadd;
+	UDPpacket *client_p;
+
+	UDPsocket server_sd;
+	UDPpacket *server_p;
+
+	char other_ip[30] = "25.122.64.63";
+	int port = 3333;
+
+	int quit;
+
+	#define PACKAGE_SIZE 512
+
+	void InitializeNet()
+	{
+		if(SDLNet_Init() < 0)
+		{
+			fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}	
+	}
+
+	void InitializeClient()
+	{
+		client_sd = SDLNet_UDP_Open(0);
+		if(client_sd == 0)
+		{
+			fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+		if(SDLNet_ResolveHost(&client_srvadd, other_ip, port) == -1)
+		{
+			fprintf(stderr, "SDLNet_ResolveHost(%s %d): %s\n", other_ip, port, SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+		client_p = SDLNet_AllocPacket(PACKAGE_SIZE);
+		if(client_p == 0)
+		{
+			fprintf(stderr, "SDLNet_AllocPacket: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	void InitializeServer()
+	{
+		server_sd = SDLNet_UDP_Open(port);
+		if(server_sd == 0)
+		{
+			fprintf(stderr, "SDLNet_UDP_Open: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+		server_p = SDLNet_AllocPacket(PACKAGE_SIZE);
+		if(server_p == 0)
+		{
+			fprintf(stderr, "SDLNet_AllocPacket: %s\n", SDLNet_GetError());
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	char* ReceiveMessage()
+	{
+		if(SDLNet_UDP_Recv(server_sd, server_p))
+		{
+			return (char *)server_p->data;
+			/*
+			_printf("UDP Packet incoming\n");
+			_printf("\tChan:    %d\n", _p:channel);
+			_printf("\tData:    %s\n", (char *)_p:data);
+			_printf("\tLen:     %d\n", _p:len);
+			_printf("\tMaxlen:  %d\n", _p:maxlen);
+			_printf("\tStatus:  %d\n", _p:status);
+			_printf("\tAddress: %x %x\n", _p:address.host, _p:address.port);
+			*/
+		}
+		else
+		{
+			return NULL;
+		}	
+	}
+
+	void SndMsg(char* message)
+	{
+		strcpy((char *)client_p->data,message);
+		client_p->address.host = client_srvadd.host;
+		client_p->address.port = client_srvadd.port;
+		client_p->len = strlen((char *)client_p->data) + 1;
+		SDLNet_UDP_Send(client_sd, -1, client_p);	
+	}
+
+	void CloseNet()
+	{
+		SDLNet_FreePacket(client_p);
+		SDLNet_FreePacket(server_p);
+		SDLNet_Quit();
+	}
+
+end
+
+_printf("Inicializando Biblioteca de Rede\n");
+_InitializeNet();
+
+par/and do
+
+	_printf("Inicializando Servidor\n");
+	_InitializeServer();
+
+	every 11ms do
+		var char[] s;
+
+		finalize
+			s = _ReceiveMessage();
+		with
+		end
+
+		if s != null then
+			_printf("Recebeu pacote contendo <%s>.\n",(int)s);
+		end
+	end
+with
+
+	_printf("Escreva o ip de destino:\n");
+	_scanf("%s",_other_ip);
+
+	_printf("Inicializando Cliente\n");
+	_InitializeClient();
+
+	every 1s do
+		_printf("Enviando Pacote de Testes para [%s].\n",_other_ip);
+		_SndMsg("Testando 123...");
+	end
+end
+
+_CloseNet();
