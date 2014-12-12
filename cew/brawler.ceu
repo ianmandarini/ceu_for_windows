@@ -1,4 +1,4 @@
-// ceusdlc brawler.ceu interfaces.ceu hero.ceu platform.ceu charmander_attacks.ceu fire_ball.ceu fire_nova.ceu fire_thrower.ceu overheat.ceu menu_screen.ceu
+// ceusdlc brawler.ceu interfaces.ceu hero.ceu platform.ceu charmander_attacks.ceu fire_ball.ceu fire_nova.ceu fire_thrower.ceu overheat.ceu menu_screen.ceu enemy.ceu server_screen.ceu connection_screen.ceu network.ceu client_screen.ceu
 
 #ifndef ALL
     #include "sdl.ceu"
@@ -76,8 +76,6 @@ end
 //============================================================
 
 #include "menu_screen.ceu"
-
-#include "connection_screen.ceu"
 
 if server_state == 1 then
     #include "server_screen.ceu"
@@ -186,22 +184,39 @@ with
             end
         end
     with
-        var _SDL_KeyboardEvent[] key1;
-        every key1 in SDL_KEYDOWN do
-            if key1:keysym.sym == _SDLK_j then
-                var _Pos p;
-                p.x = rival.pos_x - 0.02;
-                p.y = rival.pos_y;
-                emit rival.update_position => &p;
+        var int i = 0;
+        var int j = 0;
+        var int k = 0;
+        var char ** strings[3];
+        var string_temp[512];
+        every SDL_DT
+            if string_do_Ian[0] == 'h'
+            loop do 
+                loop do
+                    string_temp[k] = string_do_Ian[j];
+                    j++;
+                    k++;
 
-            else/if key1:keysym.sym == _SDLK_l then
-                var _Pos p;
-                p.x = rival.pos_x + 0.02;
-                p.y = rival.pos_y;
-                emit rival.update_position => &p;
+                    if string_do_Ian[j] == ' ' then
+                        j++;
+                        k = 0;
+                        break;
+                    end
+                end
+
+                strings[i] = string_temp;
+
+                i++;
+                if i>2 then
+                    break;
+                end
             end
         end
 
+        var _Pos p;
+        p.x = _atof(strings[1]);
+        p.y = _ator(strings[2]);
+        emit rival.update_position => &p;
 
     with
         var _SDL_KeyboardEvent[] key;
@@ -235,6 +250,8 @@ with
                 end
             end
         end
+
+        
     end
 with
     every SDL_REDRAW do

@@ -40,12 +40,7 @@ with
         _scanf("%s", (int)_your_ip);
     end;
     */
-    _strcpy((int)_your_ip,"127.0.0.1");
-
-    _strcpy((int)hand_shake_msg,"i ");
-    _strcat((int)hand_shake_msg,(int)_your_ip);
-    _strcat((int)hand_shake_msg," ");
-    _strcat((int)hand_shake_msg,(int)_other_ip);
+    _strcpy((int)_your_ip,"25.122.64.63");
 
     _printf("Write the ip to Connect:\n");
     /*
@@ -53,12 +48,18 @@ with
         _scanf("%s", _other_ip);
     end;
     */
-    _strcpy((int)_other_ip,"127.0.0.1");
+    _strcpy((int)_other_ip,"25.121.253.21");
 
     _InitializeClient();
     _InitializeServer();
 
     _printf("Trying to Connect to the IP %s...\n",_other_ip);
+
+    _strcpy((int)hand_shake_msg,"i ");
+    _strcat((int)hand_shake_msg,(int)_your_ip);
+    _strcat((int)hand_shake_msg," ");
+    _strcat((int)hand_shake_msg,(int)_other_ip);
+
 
     every 1s do
         var char[] s;
