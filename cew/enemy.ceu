@@ -24,8 +24,7 @@ do
     var int hp_b = 0x47;
 
     var _SDL_Rect rect;
-    //var _SDL_Texture[] tex = _ENEMY_TEXTURE;
-    var _SDL_Texture[] tex = _SQUIRTLE_TEXTURE;
+    var _SDL_Texture[] tex = _ENEMY_TEXTURE;
 
     var float hp = 1.0;
 
