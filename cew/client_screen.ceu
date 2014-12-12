@@ -40,7 +40,7 @@ with
         _scanf("%s", (int)_your_ip);
     end;
     */
-    _strcpy((int)_your_ip,"25.122.64.63");
+    _strcpy((int)_your_ip,"25.121.253.21");
 
     _printf("Write the ip to Connect:\n");
     /*
@@ -48,7 +48,7 @@ with
         _scanf("%s", _other_ip);
     end;
     */
-    _strcpy((int)_other_ip,"25.121.253.21");
+    _strcpy((int)_other_ip,"25.122.64.63");
 
     _InitializeClient();
     _InitializeServer();

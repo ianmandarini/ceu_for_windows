@@ -19,6 +19,13 @@ charmander.r = 0xFF;
 charmander.g = 0x00;
 charmander.b = 0x00;
 emit charmander.change_color;
+
+var float a_dmg;
+var float a_w;
+var float a_h;
+var float a_x;
+var float a_y;
+
 par/or do
     var _SDL_KeyboardEvent[] key2;
     loop do
@@ -26,13 +33,25 @@ par/or do
         if key2:keysym.sym == _SDLK_r then
             charmander.spd_y = -0.3;
             loop i in 10 do
+
+                a_dmg = 0.02;
+                a_w = 0.03;
+                a_h = a_w * RES_X / RES_Y;
+                a_x = charmander.pos_x + charmander.w * (_rand()%100/100.0) - a_w / 2.0;
+                a_y = charmander.pos_y + charmander.h * (_rand()%100/100.0) - a_h / 2.0;
+
                 spawn FireFloorParticle in attacks with
+                    this.dmg = a_dmg;
                     this.ren = ren;
-                    this.w  = 0.03;
-                    this.h  = this.w * RES_X / RES_Y;
-                    this.pos_x = charmander.pos_x + charmander.w * (_rand()%100/100.0) - this.w / 2.0;
-                    this.pos_y = charmander.pos_y + charmander.h * (_rand()%100/100.0) - this.h / 2.0;
+                    this.w  = a_w;
+                    this.h  = a_h;
+                    this.pos_x = a_x;
+                    this.pos_y = a_y;
                 end;
+
+                var char[250] msg;
+                _snprintf((int)msg,200,"a 4 %f %f %f %f %f",a_dmg,a_w,a_h,a_x,a_y);
+                _SndMsg((int)msg);
             end
             await 50ms;
         end

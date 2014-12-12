@@ -58,7 +58,7 @@ int main(int argn, char* argc[])
 	if(argn > 1)
 	{
 		strcpy(cmd,"");
-		strcat(cmd,"mingw\\bin\\gcc -m32");
+		strcat(cmd,"mingw\\bin\\gcc -w -m32");
 		strcat(cmd," ceu-sdl\\main.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_mixer -lSDL2_image -lSDL2_net");
 		printf("\n****************************\n");
 		printf("%s\n",cmd);

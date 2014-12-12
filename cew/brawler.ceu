@@ -93,14 +93,15 @@ with
 
     var Enemy rival with
         this.ren = ren;
-        this.pos_x = 0.4;
-        this.pos_y = 0.5;
+        this.pos_x = -1.0;
+        this.pos_y = -1.0;
         this.w  = 0.10;
         this.h  = this.w * RES_X / RES_Y;
     end;
 
     pool Platform[] platforms;
     pool Attack[] attacks;
+    pool Attack[] enemy_attacks;
 
     spawn Platform in platforms with
         this.ren = ren;
@@ -125,9 +126,8 @@ with
     end;
 
     par do
-        every SDL_DT do
+        every 1ms do
             var char[] s;
-            var _Pos p;
 
             finalize
                 s = _ReceiveMessage();
@@ -135,10 +135,93 @@ with
             end
 
             if s != null then
-                _printf("Received <%s>.\n",(int)s);
+                var _Pos p;
                 if s[0] == 'h' then
                     _sscanf((int)s,"h %f %f",(int)&p.x,(int)&p.y);
                     emit rival.update_position => &p;
+                else/if s[0] == 'k' then
+                    var int r_r;
+                    var int r_g;
+                    var int r_b;
+                    _sscanf((int)s,"k %d %d %d",(int)&r_r,(int)&r_g,(int)&r_b);
+                    rival.r = r_r;
+                    rival.g = r_g;
+                    rival.b = r_b;
+                    emit rival.change_color;
+                else/if s[0] == 'a' then
+                    var int id;
+                    _sscanf((int)s,"a %d",(int)&id);
+                    if id == 1 then
+                        var float r_dmg;
+                        var float r_w;
+                        var float r_h;
+                        var float r_x;
+                        var float r_y;
+                        var int r_horizontal;
+                        var int r_vertical;
+                        _sscanf((int)s,"a %*d %f %f %f %f %f %d %d",(int)&r_dmg,(int)&r_w,(int)&r_h,(int)&r_x,(int)&r_y,(int)&r_horizontal,(int)&r_vertical);
+                        spawn FireBall in enemy_attacks with
+                            this.dmg = r_dmg;
+                            this.ren = ren;
+                            this.w  = r_w;
+                            this.h  = r_h;
+                            this.pos_x = r_x;
+                            this.pos_y = r_y;
+                            this.horizontal = r_horizontal;
+                            this.vertical = r_vertical;
+                        end;
+                    else/if id == 2 then
+                        var float r_dmg;
+                        var float r_w;
+                        var float r_h;
+                        var float r_x;
+                        var float r_y;
+                        var float r_angle;
+                        _sscanf((int)s,"a %*d %f %f %f %f %f %f",(int)&r_dmg,(int)&r_w,(int)&r_h,(int)&r_x,(int)&r_y,(int)&r_angle);
+                        spawn FireNovaParticle in enemy_attacks with
+                            this.dmg = r_dmg;
+                            this.ren = ren;
+                            this.w  = r_w;
+                            this.h  = r_h;
+                            this.pos_x = r_x;
+                            this.pos_y = r_y;
+                            this.angle = r_angle;
+                        end;
+                    else/if id == 3 then
+                        var float r_dmg;
+                        var float r_w;
+                        var float r_h;
+                        var float r_x;
+                        var float r_y;
+                        var float r_angle;
+                        var float r_range_factor;
+                        _sscanf((int)s,"a %*d %f %f %f %f %f %f %f",(int)&r_dmg,(int)&r_w,(int)&r_h,(int)&r_x,(int)&r_y,(int)&r_angle,(int)&r_range_factor);
+                        spawn FlameThrowerParticle in enemy_attacks with
+                            this.dmg = r_dmg;
+                            this.ren = ren;
+                            this.w  = r_w;
+                            this.h  = r_h;
+                            this.pos_x = r_x;
+                            this.pos_y = r_y;
+                            this.angle = r_angle;
+                            this.range_factor = r_range_factor;
+                        end;
+                    else/if id == 4 then
+                        var float r_dmg;
+                        var float r_w;
+                        var float r_h;
+                        var float r_x;
+                        var float r_y;
+                        _sscanf((int)s,"a %*d %f %f %f %f %f",(int)&r_dmg,(int)&r_w,(int)&r_h,(int)&r_x,(int)&r_y);
+                        spawn FireFloorParticle in enemy_attacks with
+                            this.dmg = r_dmg;
+                            this.ren = ren;
+                            this.w  = r_w;
+                            this.h  = r_h;
+                            this.pos_x = r_x;
+                            this.pos_y = r_y;
+                        end;
+                    end
                 end
             end
         end
@@ -154,11 +237,10 @@ with
             _snprintf((int)num,50,"%f",charmander.pos_y);
             //_itoa(charmander.pos_y,(int)num,10);
             _strcat((int)msg,(int)num);
-            _printf("%s\n",(int)msg);
             _SndMsg((int)msg);
         end
     with
-        every SDL_DT do
+        every 5ms do
             loop (Platform*)plat in platforms do
                 if charmander.pos_x + charmander.w >= plat:pos_x and 
                     charmander.pos_x <= plat:pos_x + plat:w and 
@@ -169,6 +251,17 @@ with
                     emit plat:go_collide;
                 else
                     emit plat:un_collide;
+                end
+            end
+
+            loop (Attack*)a in enemy_attacks do
+                if a:pos_x < charmander.pos_x + charmander.w and
+                    a:pos_x + a:w > charmander.pos_x and
+                    a:pos_y < charmander.pos_y + charmander.h and
+                    a:pos_y + a:h > charmander.pos_y then
+
+                    charmander.hp = charmander.hp - a:dmg;
+                    emit a:kill;
                 end
             end
 

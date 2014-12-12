@@ -6,18 +6,8 @@ class Enemy with
     event float go_collide;
     event void change_color;
     event void die;
-    event void enable_jump;
-    event void disable_jump;
-    event void enable_movement;
-    event void disable_movement;
 
     event _Pos* update_position;
-/*    
-    event void walk_l;
-    event void walk_l_stop;
-    event void walk_r;
-    event void walk_r_stop;
-*/
 
     var int r = 0x00;
     var int g = 0x00;
@@ -34,165 +24,29 @@ do
     var int hp_b = 0x47;
 
     var _SDL_Rect rect;
-    var _SDL_Texture[] tex = _ENEMY_TEXTURE;
+    //var _SDL_Texture[] tex = _ENEMY_TEXTURE;
+    var _SDL_Texture[] tex = _SQUIRTLE_TEXTURE;
 
     var float hp = 1.0;
 
-    this.spd_x = 0;
-    this.spd_y = 0;
-    this.acc_x = 0;
-    this.acc_y = 0;
-
-    var int jumps_max = 2;
-    var int jumps_ready = jumps_max;
-
     par do
-        var int dt_ms;
-        var float dt_s;
-        every dt_ms in SDL_DT do
-            dt_s = dt_ms/1000.0;
-
-            this.pos_x = this.pos_x + this.spd_x * dt_s;
-            this.pos_y = this.pos_y + this.spd_y * dt_s;
-
-            this.spd_x = this.spd_x + this.acc_x * dt_s;
-            this.spd_y = this.spd_y + this.acc_y * dt_s;
-        end
-    with
-        var int dt_ms;
-        var float dt_s;
-        every dt_ms in SDL_DT do
-            dt_s = dt_ms/1000.0;
-
-            this.spd_y = this.spd_y + GRAVITY * dt_s;
-        end
-    with
-        var float plat_y;
-        loop do
-            plat_y = await go_collide;
-            this.spd_y = 0;
-            this.pos_y = plat_y - this.h;
-            jumps_ready = jumps_max;
-        end
-    with
         loop do
             await die;
             this.pos_x = 0.5;
             this.pos_y = 0.0;
-            this.spd_x = 0;
-            this.spd_y = 0;
-            this.acc_x = 0;
-            this.acc_y = 0;
-            jumps_ready = 0;
             hp = hp - 0.3;
         end
     with
-        var int dt_ms;
-        var float dt_s;
-    
         loop do
-            par/or do
+            var _Pos* actual_position = await update_position;
 
-                var _Pos* actual_position = await update_position;
-
-                this.pos_x = actual_position:x;
-                this.pos_y = actual_position:y;
-
-            with
-                await disable_movement;
-            end
-/*
-                await walk_l;
-
-                par/or do
-                    await disable_movement;
-                with
-                    await walk_l_stop;
-                with
-                    every dt_ms in SDL_DT do
-                        dt_s = dt_ms/1000.0;
-                        this.pos_x = this.pos_x + (-0.4) * dt_s;
-                    end
-                end
-            with
-                await walk_r;
-
-                par/or do
-                    await disable_movement;
-                with
-                    await walk_r_stop;
-                with
-                    every dt_ms in SDL_DT do
-                        dt_s = dt_ms/1000.0;
-                        this.pos_x = this.pos_x + (0.4) * dt_s;
-                    end
-                end*/
-        end
-
-
-/*        every dt_ms in SDL_DT do
-            dt_s = dt_ms/1000.0;
-            if walk_l == true then
-                this.pos_x = this.pos_x + (-0.4) * dt_s;
-            end
-            if walk_r == true then
-                this.pos_x = this.pos_x + (0.4) * dt_s;
-            end
-        end
-    with
-        loop do
-            par/or do
-                par do
-                    var _SDL_KeyboardEvent[] key;
-                    every key in SDL_KEYDOWN do
-                        if key:keysym.sym == _SDLK_LEFT then
-                            walk_l = true;
-                        else/if key:keysym.sym == _SDLK_RIGHT then
-                            walk_r = true;
-                        end
-                    end
-                with
-                    var _SDL_KeyboardEvent[] key;
-                    every key in SDL_KEYUP do
-                        if key:keysym.sym == _SDLK_LEFT then
-                            walk_l = false;
-                        else/if key:keysym.sym == _SDLK_RIGHT then
-                            walk_r = false;
-                        end
-                    end
-                end
-            with
-                await disable_movement;
-                walk_l = false;
-                walk_r = false;
-            end
-            await enable_movement;
-        end 
-*/
-
-    with
-        loop do
-            par/or do
-                var _SDL_KeyboardEvent[] key;
-                loop do
-                    key = await SDL_KEYDOWN;
-                    if key:keysym.sym == _SDLK_UP then
-                        if jumps_ready > 0 then
-                            this.spd_y = -1.5;
-                            jumps_ready = jumps_ready - 1;
-                            //await 200ms;
-                        end
-                    end
-                end
-            with
-                await disable_jump;
-            end
-            await enable_jump;
+            this.pos_x = actual_position:x;
+            this.pos_y = actual_position:y;
         end
     with
         loop do
             await change_color;
-            _SDL_SetTextureColorMod(_HERO_TEXTURE, r, g, b);
+            _SDL_SetTextureColorMod((int)tex, r, g, b);
         end 
     with
         every SDL_REDRAW do

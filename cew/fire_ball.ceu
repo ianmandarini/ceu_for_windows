@@ -7,47 +7,62 @@ emit charmander.disable_movement;
 emit charmander.disable_jump;
 var _SDL_KeyboardEvent[] key2;
 key2 = await SDL_KEYDOWN;
+
+var float a_dmg;
+var float a_w;
+var float a_h;
+var float a_x;
+var float a_y;
+var int a_horizontal;
+var int a_vertical;
+
+a_dmg = 0.05;
+
 if key2:keysym.sym == _SDLK_RIGHT then
-    spawn FireBall in attacks with
-        this.ren = ren;
-        this.w  = 0.05;
-        this.h  = this.w * RES_X / RES_Y;
-        this.pos_x = charmander.pos_x + charmander.w;
-        this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
-        this.horizontal = 1;
-        this.vertical = 0;
-    end;
+    a_w = 0.05;
+    a_h = a_w * RES_X / RES_Y;
+    a_x = charmander.pos_x + charmander.w;
+    a_y = charmander.pos_y + charmander.h / 2.0 - a_h / 2.0;
+    a_horizontal = 1;
+    a_vertical = 0;
 else/if key2:keysym.sym == _SDLK_LEFT then
-    spawn FireBall in attacks with
-        this.ren = ren;
-        this.w  = 0.05;
-        this.h  = this.w * RES_X / RES_Y;
-        this.pos_x = charmander.pos_x - this.w;
-        this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
-        this.horizontal = -1;
-        this.vertical = 0;
-    end;
+    a_w = 0.05;
+    a_h = a_w * RES_X / RES_Y;
+    a_x = charmander.pos_x - a_w;
+    a_y = charmander.pos_y + charmander.h / 2.0 - a_h / 2.0;
+    a_horizontal = -1;
+    a_vertical = 0;
 else/if key2:keysym.sym == _SDLK_UP then
-    spawn FireBall in attacks with
-        this.ren = ren;
-        this.w  = 0.05;
-        this.h  = this.w * RES_X / RES_Y;
-        this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
-        this.pos_y = charmander.pos_y - this.h;
-        this.horizontal = 0;
-        this.vertical = -1;
-    end;
+    a_w = 0.05;
+    a_h = a_w * RES_X / RES_Y;
+    a_x = charmander.pos_x + charmander.w / 2.0 - a_w / 2.0;
+    a_y = charmander.pos_y - a_h;
+    a_horizontal = 0;
+    a_vertical = -1;
 else/if key2:keysym.sym == _SDLK_DOWN then
-    spawn FireBall in attacks with
-        this.ren = ren;
-        this.w  = 0.05;
-        this.h  = this.w * RES_X / RES_Y;
-        this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
-        this.pos_y = charmander.pos_y + charmander.h;
-        this.horizontal = 0;
-        this.vertical = 1;
-    end;
+    a_w = 0.05;
+    a_h = a_w * RES_X / RES_Y;
+    a_x = charmander.pos_x + charmander.w / 2.0 - a_w / 2.0;
+    a_y = charmander.pos_y + a_h;
+    a_horizontal = 0;
+    a_vertical = 1;
 end
+
+spawn FireBall in attacks with
+    this.dmg = a_dmg;
+    this.ren = ren;
+    this.w  = a_w;
+    this.h  = a_h;
+    this.pos_x = a_x;
+    this.pos_y = a_y;
+    this.horizontal = a_horizontal;
+    this.vertical = a_vertical;
+end;
+
+var char[250] msg;
+_snprintf((int)msg,200,"a 1 %f %f %f %f %f %d %d",a_dmg,a_w,a_h,a_x,a_y,a_horizontal,a_vertical);
+_SndMsg((int)msg);
+
 charmander.r = 0xFF;
 charmander.g = 0xFF;
 charmander.b = 0xFF;

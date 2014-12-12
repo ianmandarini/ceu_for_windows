@@ -21,20 +21,44 @@ else
     angle = 0.0;
 end
 
+var float a_dmg;
+var float a_w;
+var float a_h;
+var float a_x;
+var float a_y;
+var float a_angle;
+var float a_range_factor;
+
+var char[250] msg;
+
 var int move_fire = 0;
 par/or do
     var int i = 0;
     loop do
         await 10ms;
+
+        a_dmg = 0.01;
+        a_w = 0.03;
+        a_h = a_w * RES_X / RES_Y;
+        a_x = charmander.pos_x + charmander.w / 2.0 - a_w / 2.0;
+        a_y = charmander.pos_y + charmander.h / 2.0 - a_h / 2.0;
+        a_angle = angle;
+        a_range_factor = 1.0 - (10 * i) / 7000.0;
+
         spawn FlameThrowerParticle in attacks with
+            this.dmg = a_dmg;
             this.ren = ren;
-            this.w  = 0.03;
-            this.h  = this.w * RES_X / RES_Y;
-            this.pos_x = charmander.pos_x + charmander.w / 2.0 - this.w / 2.0;
-            this.pos_y = charmander.pos_y + charmander.h / 2.0 - this.h / 2.0;
-            this.angle = angle;
-            this.range_factor = 1.0 - (10 * i) / 7000.0;
+            this.w  = a_w;
+            this.h  = a_h;
+            this.pos_x = a_x;
+            this.pos_y = a_y;
+            this.angle = a_angle;
+            this.range_factor = a_range_factor;
         end;
+
+        _snprintf((int)msg,200,"a 3 %f %f %f %f %f %f %f",a_dmg,a_w,a_h,a_x,a_y,a_angle,a_range_factor);
+        _SndMsg((int)msg);
+
         i = i + 1;
     end
 with

@@ -30,4 +30,7 @@ end
 
 interface Attack with
     var float dmg;
+    event void kill;
+    interface Position;
+    interface SquareDimensions;
 end
