@@ -265,6 +265,17 @@ with
                 end
             end
 
+            loop (Attack*)a in attacks do
+                if a:pos_x < rival.pos_x + rival.w and
+                    a:pos_x + a:w > rival.pos_x and
+                    a:pos_y < rival.pos_y + rival.h and
+                    a:pos_y + a:h > rival.pos_y then
+
+                    rival.hp = rival.hp - a:dmg;
+                    emit a:kill;
+                end
+            end
+
             if charmander.pos_y >= 1.0 then
                 emit charmander.die;
             end
