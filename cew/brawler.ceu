@@ -36,6 +36,7 @@ end
 #include "interfaces.ceu"
 #include "platform.ceu"
 #include "hero.ceu"
+#include "enemy.ceu"
 #include "charmander_attacks.ceu"
 
 //============================================================
@@ -153,7 +154,9 @@ with
                 end
             end
         end
-    end    
+    end
+with
+    #include "teste_enemy.ceu"
 with
     every SDL_REDRAW do
         _SDL_RenderPresent(ren);

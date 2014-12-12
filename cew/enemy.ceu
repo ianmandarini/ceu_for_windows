@@ -1,4 +1,4 @@
-class Hero with
+class Enemy with
     var _SDL_Renderer[] ren;
 
     interface Body;
@@ -10,6 +10,11 @@ class Hero with
     event void disable_jump;
     event void enable_movement;
     event void disable_movement;
+    
+    event void walk_l;
+    event void walk_l_stop;
+    event void walk_r;
+    event void walk_r_stop;
 
     var int r = 0x00;
     var int g = 0x00;
@@ -18,17 +23,15 @@ class Hero with
 do
     var float hp_w = 0.4;
     var float hp_h = 0.05;
-    var float hp_pos_x = 0.05;
+    var float hp_pos_x = 0.95;
     var float hp_pos_y = 0.05;
     var _SDL_Rect hp_rect;
-    var int hp_r = 0x33;
-    var int hp_g = 0xFF;
-    var int hp_b = 0x77;
+    var int hp_r = 0xFF;
+    var int hp_g = 0x63;
+    var int hp_b = 0x47;
 
-    var bool walk_l = false;
-    var bool walk_r = false;
     var _SDL_Rect rect;
-    var _SDL_Texture[] tex = _HERO_TEXTURE;
+    var _SDL_Texture[] tex = _ENEMY_TEXTURE;
 
     var float hp = 1.0;
 
@@ -83,9 +86,40 @@ do
     with
         var int dt_ms;
         var float dt_s;
-        every dt_ms in SDL_DT do
-            dt_s = dt_ms/1000.0;
+    
+        loop do
+            par/or do
+                await walk_l;
 
+                par/or do
+                    await disable_movement;
+                with
+                    await walk_l_stop;
+                with
+                    every dt_ms in SDL_DT do
+                        dt_s = dt_ms/1000.0;
+                        this.pos_x = this.pos_x + (-0.4) * dt_s;
+                    end
+                end
+            with
+                await walk_r;
+
+                par/or do
+                    await disable_movement;
+                with
+                    await walk_r_stop;
+                with
+                    every dt_ms in SDL_DT do
+                        dt_s = dt_ms/1000.0;
+                        this.pos_x = this.pos_x + (0.4) * dt_s;
+                    end
+                end
+            end
+        end
+
+
+/*        every dt_ms in SDL_DT do
+            dt_s = dt_ms/1000.0;
             if walk_l == true then
                 this.pos_x = this.pos_x + (-0.4) * dt_s;
             end
@@ -122,6 +156,8 @@ do
             end
             await enable_movement;
         end 
+*/
+
     with
         loop do
             par/or do
