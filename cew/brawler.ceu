@@ -145,7 +145,7 @@ with
     with
         var char[100] msg;
         var char[100] num;
-        every 10ms do
+        every SDL_DT do
             _strcpy((int)msg,"h ");
             _snprintf((int)num,50,"%f",charmander.pos_x);
             //_itoa(charmander.pos_x,(int)num,10);
@@ -158,7 +158,7 @@ with
             _SndMsg((int)msg);
         end
     with
-        every 10ms do
+        every SDL_DT do
             loop (Platform*)plat in platforms do
                 if charmander.pos_x + charmander.w >= plat:pos_x and 
                     charmander.pos_x <= plat:pos_x + plat:w and 
