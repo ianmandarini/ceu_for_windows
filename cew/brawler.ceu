@@ -125,6 +125,24 @@ with
     end;
 
     par do
+        every SDL_DT do
+            var char[] s;
+            var _Pos p;
+
+            finalize
+                s = _ReceiveMessage();
+            with
+            end
+
+            if s != null then
+                _printf("Received <%s>.\n",(int)s);
+                if s[0] == 'h' then
+                    _sscanf((int)s,"h %f %f",(int)&p.x,(int)&p.y);
+                    emit rival.update_position => &p;
+                end
+            end
+        end
+    with
         var char[100] msg;
         var char[100] num;
         every SDL_DT do
@@ -137,7 +155,7 @@ with
             //_itoa(charmander.pos_y,(int)num,10);
             _strcat((int)msg,(int)num);
             _printf("%s\n",(int)msg);
-            //_SndMsg("h");
+            _SndMsg(msg);
         end
     with
         every SDL_DT do
@@ -175,24 +193,6 @@ with
 
             if rival.pos_y >= 1.0 then
                 emit rival.die;
-            end
-        end
-    with
-        every SDL_DT do
-            var char[] s;
-            var _Pos p;
-
-            finalize
-                s = _ReceiveMessage();
-            with
-            end
-
-            if s != null then
-                _printf("Received <%s>.\n",(int)s);
-                if s[0] == 'h' then
-                    _sscanf((int)s,"h %f %f",(int)&p.x,(int)&p.y);
-                    emit rival.update_position => &p;
-                end
             end
         end
     with
