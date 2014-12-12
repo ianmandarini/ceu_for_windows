@@ -8,7 +8,7 @@ native do
 	UDPsocket server_sd;
 	UDPpacket *server_p;
 
-	char other_ip[30] = "0.0.0.0";
+	char other_ip[50] = "0.0.0.0";
 	int port = 3333;
 
 	int quit;

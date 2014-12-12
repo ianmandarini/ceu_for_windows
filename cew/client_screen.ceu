@@ -5,17 +5,12 @@
     end
 
     finalize
-        _BASIC_TEXTURE = _IMG_LoadTexture(ren, "server_screen3.png");
+        _BASIC_TEXTURE = _IMG_LoadTexture(ren, "client_screen.png");
     with
         _SDL_DestroyTexture(_BASIC_TEXTURE);
     end
 
     var _SDL_Texture[] basic_tex = _BASIC_TEXTURE;
-
-//============================================================
-
-    var int condicao_do_Ian;
-    var char[] string_do_Ian;
 
 //============================================================
 
@@ -33,13 +28,61 @@ with
         _SDL_RenderCopy(ren, basic_tex, null, &rect);
     end
 with
-    _scanf("%s", (int) &string_do_Ian);
-    
-    every SDL_DT do
-        if condicao_do_Ian then
-            break;
+    var char[200] hand_shake_msg;
+
+    native do
+        char your_ip[100];
+    end
+
+    _printf("Write your ip:\n");
+    /*
+    async do
+        _scanf("%s", (int)_your_ip);
+    end;
+    */
+    _strcpy((int)_your_ip,"127.0.0.1");
+
+    _strcpy((int)hand_shake_msg,"i ");
+    _strcat((int)hand_shake_msg,(int)_your_ip);
+    _strcat((int)hand_shake_msg," ");
+    _strcat((int)hand_shake_msg,(int)_other_ip);
+
+    _printf("Write the ip to Connect:\n");
+    /*
+    async do
+        _scanf("%s", _other_ip);
+    end;
+    */
+    _strcpy((int)_other_ip,"127.0.0.1");
+
+    _InitializeClient();
+    _InitializeServer();
+
+    _printf("Trying to Connect to the IP %s...\n",_other_ip);
+
+    every 1s do
+        var char[] s;
+        var char[100] ip_read;
+
+        finalize
+            s = _ReceiveMessage();
+        with
+        end
+
+        _SndMsg((int)hand_shake_msg);
+        _printf("Sending <%s>.\n",(int)hand_shake_msg);
+
+        if s != null then
+            if s[0] == 'i' then
+                _sscanf((int)s,"i %s %*s",(int)ip_read);
+                if _strcmp((int)ip_read,(int)_other_ip) == 0 then
+                    _printf("Success!");
+                    break;
+                end
+            end
         end
     end
+    _printf("Starting Game.\n");
 with
     every SDL_REDRAW do
         _SDL_RenderPresent(ren);

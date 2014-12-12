@@ -28,6 +28,43 @@ with
         _SDL_RenderCopy(ren, basic_tex, null, &rect);
     end
 with
+    _InitializeServer();
+    every SDL_DT do
+        var char[200] hand_shake_msg;
+
+        var char[] s;
+        var char[100] ip_read;
+        var char[100] my_ip;
+
+        finalize
+            s = _ReceiveMessage();
+        with
+        end
+
+        if s != null then
+            if s[0] == 'i' then
+                _sscanf((int)s,"i %s %s",(int)ip_read,(int)my_ip);
+                _strcpy((int)_other_ip,(int)ip_read);
+
+                _printf("Connection with %s found.\n",_other_ip);
+
+                _InitializeClient();
+
+                _strcpy((int)hand_shake_msg,"i ");
+                _strcat((int)hand_shake_msg,(int)my_ip);
+                _strcat((int)hand_shake_msg," ");
+                _strcat((int)hand_shake_msg,(int)_other_ip);
+
+                _SndMsg((int)hand_shake_msg);
+                _printf("Sending <%s>.\n",(int)hand_shake_msg);
+
+                break;
+
+            end
+        end
+    end
+    _printf("Starting Game.\n");
+with
     every SDL_REDRAW do
         _SDL_RenderPresent(ren);
     end
