@@ -75,6 +75,7 @@ with
     end
 with
     var _SDL_MouseButtonEvent[] mouse;
+    
     par/or do
         mouse = await SDL_MOUSEBUTTONDOWN
             until _SDL_Rect_vs_Mouse(&rect1, mouse);

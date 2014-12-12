@@ -71,14 +71,18 @@ end
 
 //============================================================
 
+    var int server_state = 0;
+
+//============================================================
+
 #include "menu_screen.ceu"
 
 #include "connection_screen.ceu"
 
 if server_state == 1 then
-    #include "server_screen"
+    #include "server_screen.ceu"
 else
-    //NOME DA SCREEN DO CLIENT
+    #include "client_screen.ceu"
 end
 
 par/or do

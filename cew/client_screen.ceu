@@ -14,6 +14,11 @@
 
 //============================================================
 
+    var int condicao_do_Ian;
+    var char[] string_do_Ian;
+
+//============================================================
+
 par/or do
     every SDL_REDRAW do
         _SDL_SetRenderDrawColor(ren, 0x33, 0x33, 0x33, 0);
@@ -26,6 +31,14 @@ with
         rect.w = 560;
         rect.h = 400;
         _SDL_RenderCopy(ren, basic_tex, null, &rect);
+    end
+with
+    _scanf("%s", (int) &string_do_Ian);
+    
+    every SDL_DT do
+        if condicao_do_Ian then
+            break;
+        end
     end
 with
     every SDL_REDRAW do
